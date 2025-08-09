@@ -1,0 +1,47 @@
+Date : 2025-07-30 03:11:44
+Directory : c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop
+Total : 15 files,  4242 codes, 92 comments, 189 blanks, all 4523 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |         12 |      2,395 |         60 |        117 |      2,572 |
+| JSON       |          2 |      1,544 |          0 |          0 |      1,544 |
+| CSS        |          1 |        303 |         32 |         72 |        407 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                          | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                             |         15 |      4,242 |         92 |        189 |      4,523 |
+| . (Files)                                                                                     |          3 |      2,340 |         29 |         59 |      2,428 |
+| src                                                                                           |         12 |      1,902 |         63 |        130 |      2,095 |
+| src (Files)                                                                                   |          1 |        303 |         32 |         72 |        407 |
+| src\components                                                                                |          6 |      1,076 |         17 |         79 |      1,172 |
+| src\pages                                                                                     |          5 |        523 |         14 |        -21 |        516 |
+| src\pages\admin                                                                               |          5 |        523 |         14 |        -21 |        516 |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                      | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\package-lock.json                  | JSON       |      1,539 |          0 |          0 |      1,539 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\package.json                       | JSON       |          5 |          0 |          0 |          5 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\components\AnimatedCounter.js  | JavaScript |        105 |          3 |         17 |        125 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\components\Charts.js           | JavaScript |        468 |          4 |         23 |        495 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\components\LoadingOverlay.js   | JavaScript |         46 |          3 |          6 |         55 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\components\LoadingSpinner.js   | JavaScript |        102 |          2 |         11 |        115 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\components\PermissionTable.js  | JavaScript |         85 |          0 |          2 |         87 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\components\StatsTable.js       | JavaScript |        270 |          5 |         20 |        295 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\index.css                      | CSS        |        303 |         32 |         72 |        407 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\pages\admin\CategoryManager.js | JavaScript |          2 |          0 |          0 |          2 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\pages\admin\Dashboard.js       | JavaScript |        887 |          9 |         30 |        926 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\pages\admin\NewsManager.js     | JavaScript |        -95 |         10 |        -28 |       -113 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\pages\admin\ProductManager.js  | JavaScript |       -208 |          5 |          3 |       -200 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\src\pages\admin\UserManager.js     | JavaScript |        -63 |        -10 |        -26 |        -99 |
+| c:\Users\Admin\Downloads\Project-laptop-shop\FE-laptopshop\trans.js                           | JavaScript |        796 |         29 |         59 |        884 |
+| Total                                                                                         |            |      4,242 |         92 |        189 |      4,523 |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

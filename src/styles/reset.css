@@ -1,0 +1,147 @@
+/* ===================================================================
+   RESET CSS – Phiên bản hiện đại
+   Tối ưu cho dự án React / SPA
+   =================================================================== */
+
+/* 1. Reset cơ bản cho tất cả phần tử */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. Xóa style mặc định của HTML */
+html {
+  line-height: 1.15; /* Fix spacing mặc định */
+  -webkit-text-size-adjust: 100%; /* Ngăn Safari phóng to font */
+  -webkit-font-smoothing: antialiased; /* Font mượt hơn */
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth; /* Cuộn mượt */
+}
+
+/* 3. Body mặc định */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  background-color: #fff;
+  color: #000;
+}
+
+/* 4. Reset tiêu đề */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* 5. Reset ul, ol */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 6. Reset a */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 7. Reset button */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* 8. Reset hình ảnh */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 9. Form elements */
+input,
+textarea {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
+
+/* 10. Table */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 11. Quote */
+blockquote,
+q {
+  quotes: none;
+}
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+  content: "";
+  content: none;
+}
+
+/* 12. Strong, Bold */
+b,
+strong {
+  font-weight: bolder;
+}
+
+/* 13. Code elements */
+code,
+pre {
+  font-family: "Fira Code", monospace;
+  font-size: 0.95em;
+}
+
+/* 14. Ẩn overflow mặc định ở iframe/video */
+iframe {
+  border: none;
+}
+
+/* 15. Remove tap highlight (mobile) */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 16. Tối ưu cho dark mode (tùy chọn) */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #ffffff;
+  }
+}
