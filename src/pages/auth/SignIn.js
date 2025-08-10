@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 import axiosClient from "../../config/axios";
 import { Form, Input, Button } from 'antd';
+import useDeviceDetection from '../../hooks/useDeviceDetection';
 
 const SignIn = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const { signin } = useAuth();
     const [form] = Form.useForm();
+    const { isMobile, isTablet, isDesktop } = useDeviceDetection();
     
     // Animated values for charts
     const [salesRevenue, setSalesRevenue] = useState(0);
@@ -126,6 +128,180 @@ const SignIn = () => {
         }
     };
 
+    // Mobile/Tablet Layout
+    if (isMobile || isTablet) {
+        return (
+            <div className="min-h-screen bg-gray-50 p-4 sm:p-6 ">
+                {/* Mobile Header */}
+                <div className="text-center mb-6 sm:mb-8 ">
+                    <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4">
+                        <i className="fas fa-laptop-code text-white text-lg sm:text-xl"></i>
+                    </div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                        Welcome Back to Laptop Shop
+                    </h1>
+                    <p className="text-gray-600 text-sm sm:text-base">Enter your username and password to continue.</p>
+                </div>
+
+                {/* Mobile Form Container */}
+                <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-6  border border-gray-400   ">
+                    <Form form={form} layout="vertical" onFinish={onSubmit} autoComplete="off">
+                        {/* Demo Info */}
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+                            <p className="text-blue-700 text-xs sm:text-sm text-center">
+                                <i className="fas fa-info-circle mr-1"></i>
+                                Demo Admin: admin@gmail.com / admin2747 (Đã điền sẵn)
+                            </p>
+                        </div>
+
+                        {/* Quick Login Buttons */}
+                        <div className="space-y-3 mb-4 sm:mb-6">
+                            <p className="text-gray-600 text-xs sm:text-sm text-center font-medium">Đăng nhập nhanh:</p>
+                            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                                <Button
+                                    type="button"
+                                    onClick={() => quickLogin('admin')}
+                                    disabled={loading}
+                                    className="bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm"
+                                    size={isMobile ? "small" : "middle"}
+                                >
+                                    <i className="fas fa-user-shield mr-1 sm:mr-2"></i>
+                                    Admin
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={() => quickLogin('user')}
+                                    disabled={loading}
+                                    className="bg-green-500 hover:bg-green-600 text-white text-xs sm:text-sm"
+                                    size={isMobile ? "small" : "middle"}
+                                >
+                                    <i className="fas fa-user mr-1 sm:mr-2"></i>
+                                    User
+                                </Button>
+                            </div>
+                            <div className="text-center">
+                                <span className="text-gray-400 text-xs">hoặc điền thông tin bên dưới</span>
+                            </div>
+                        </div>
+
+                        {/* Email field */}
+                        <Form.Item
+                            label={<span className="text-sm sm:text-base">Email</span>}
+                            name="email"
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập email' },
+                                { type: 'email', message: 'Email không hợp lệ' },
+                            ]}
+                        >
+                            <Input
+                                size={isMobile ? "middle" : "large"}
+                                prefix={<FaEnvelope className="text-gray-400" />}
+                                placeholder="Enter your email address"
+                                autoComplete="off"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck={false}
+                                disabled={loading}
+                            />
+                        </Form.Item>
+
+                        {/* Password field */}
+                        <Form.Item
+                            label={<span className="text-sm sm:text-base">Password</span>}
+                            name="password"
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập mật khẩu' },
+                                { min: 6, message: 'Mật khẩu tối thiểu 6 ký tự' },
+                            ]}
+                        >
+                            <Input.Password
+                                size={isMobile ? "middle" : "large"}
+                                prefix={<FaLock className="text-gray-400" />}
+                                placeholder="Enter your password"
+                                autoComplete="off"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck={false}
+                                disabled={loading}
+                            />
+                        </Form.Item>
+
+                        {/* Forgot password */}
+                        <div className="flex justify-end mb-4">
+                            <Button
+                                type="link"
+                                onClick={() => navigate('/reset-password')}
+                                className="p-0 text-xs sm:text-sm"
+                            >
+                                Forgot password?
+                            </Button>
+                        </div>
+
+                        {/* Submit button */}
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            size={isMobile ? "middle" : "large"}
+                            loading={loading}
+                            className="w-full bg-black hover:bg-gray-800 text-white border-0 mb-4"
+                        >
+                            Sign In
+                        </Button>
+
+                        {/* Divider */}
+                        <div className="flex items-center my-4 sm:my-6">
+                            <div className="flex-1 border-t border-gray-300"></div>
+                            <span className="px-3 sm:px-4 text-xs sm:text-sm text-gray-500">Or login with</span>
+                            <div className="flex-1 border-t border-gray-300"></div>
+                        </div>
+
+                        {/* Social Login */}
+                        <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4">
+                            <Button 
+                                size={isMobile ? "small" : "middle"} 
+                                className="flex items-center justify-center border border-gray-300 hover:bg-gray-50 text-xs sm:text-sm"
+                            >
+                                <i className="fab fa-google mr-1 sm:mr-2 text-red-500"></i>
+                                Google
+                            </Button>
+                            <Button 
+                                size={isMobile ? "small" : "middle"} 
+                                className="flex items-center justify-center border border-gray-300 hover:bg-gray-50 text-xs sm:text-sm"
+                            >
+                                <i className="fab fa-apple mr-1 sm:mr-2"></i>
+                                Apple
+                            </Button>
+                        </div>
+
+                        {/* Register link */}
+                        <div className="text-center mb-4">
+                            <span className="text-gray-600 text-sm">Don't have an account? </span>
+                            <Button
+                                type="link"
+                                onClick={() => navigate('/signup')}
+                                className="p-0 text-blue-600 text-sm"
+                            >
+                                Register
+                            </Button>
+                        </div>
+                    </Form>
+
+                    {/* Footer */}
+                    <div className="text-center">
+                        <button
+                            onClick={() => navigate("/")}
+                            className="text-xs sm:text-sm text-gray-500 hover:text-gray-700 transition duration-200 flex items-center justify-center mx-auto"
+                        >
+                            <i className="fas fa-arrow-left mr-2"></i>
+                            Quay về trang chủ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Desktop Layout (unchanged)
     return (
         <div className="h-screen flex">
             {/* Left Column - Login Form */}
@@ -321,7 +497,7 @@ const SignIn = () => {
                                  <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '80%', animationDelay: '0.2s' }}></div>
                                  <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '45%', animationDelay: '0.4s' }}></div>
                                  <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '90%', animationDelay: '0.6s' }}></div>
-                                 <div className="w-3 bg-green-500 rounded-t animate-bounce" style={{ height: '75%', animationDelay: '0.8s' }}></div>
+                                 <div className="w-3 bg-green-500 rounded-bounce" style={{ height: '75%', animationDelay: '0.8s' }}></div>
                              </div>
                         </div>
 

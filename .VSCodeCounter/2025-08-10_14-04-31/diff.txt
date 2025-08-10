@@ -1,0 +1,68 @@
+Date : 2025-08-10 14:04:31
+Directory : e:\Workspace\Project-laptop-shop\client
+Total : 29 files,  1576 codes, 93 comments, 285 blanks, all 1954 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| CSS        |          7 |        656 |         54 |        136 |        846 |
+| JavaScript |         19 |        592 |         39 |         61 |        692 |
+| HTML       |          3 |        328 |          0 |         88 |        416 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                   |         29 |      1,576 |         93 |        285 |      1,954 |
+| . (Files)                                                                           |          1 |        156 |          0 |         44 |        200 |
+| src                                                                                 |         28 |      1,420 |         93 |        241 |      1,754 |
+| src (Files)                                                                         |          2 |          8 |          0 |          1 |          9 |
+| src\components                                                                      |          8 |        434 |          9 |         59 |        502 |
+| src\components (Files)                                                              |          3 |        190 |          2 |         12 |        204 |
+| src\components\admin                                                                |          4 |        242 |          7 |         47 |        296 |
+| src\components\card                                                                 |          1 |          2 |          0 |          0 |          2 |
+| src\hooks                                                                           |          1 |         36 |          8 |         11 |         55 |
+| src\layouts                                                                         |          1 |          0 |         10 |          0 |         10 |
+| src\pages                                                                           |          7 |       -228 |         -4 |         -9 |       -241 |
+| src\styles                                                                          |          7 |        738 |         54 |        150 |        942 |
+| src\trash                                                                           |          1 |        392 |          9 |         16 |        417 |
+| src\utils                                                                           |          1 |         40 |          7 |         13 |         60 |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                            | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| e:\Workspace\Project-laptop-shop\client\README.md                                   | HTML       |        156 |          0 |         44 |        200 |
+| e:\Workspace\Project-laptop-shop\client\src\App.css                                 | CSS        |          0 |          0 |          1 |          1 |
+| e:\Workspace\Project-laptop-shop\client\src\App.js                                  | JavaScript |          8 |          0 |          0 |          8 |
+| e:\Workspace\Project-laptop-shop\client\src\components\Header.js                    | JavaScript |        216 |          2 |          9 |        227 |
+| e:\Workspace\Project-laptop-shop\client\src\components\LoadingProgressBar.js        | JavaScript |          0 |          0 |          1 |          1 |
+| e:\Workspace\Project-laptop-shop\client\src\components\NotificationsPanel.js        | JavaScript |        -26 |          0 |          2 |        -24 |
+| e:\Workspace\Project-laptop-shop\client\src\components\admin\AdminDeviceWarning.js  | JavaScript |         30 |          1 |          5 |         36 |
+| e:\Workspace\Project-laptop-shop\client\src\components\admin\DesktopOnlyRoute.js    | JavaScript |         52 |          3 |          6 |         61 |
+| e:\Workspace\Project-laptop-shop\client\src\components\admin\MobileAdminRedirect.js | JavaScript |         70 |          3 |          7 |         80 |
+| e:\Workspace\Project-laptop-shop\client\src\components\admin\README.md              | HTML       |         90 |          0 |         29 |        119 |
+| e:\Workspace\Project-laptop-shop\client\src\components\card\CardPromoHalfImage.js   | JavaScript |          2 |          0 |          0 |          2 |
+| e:\Workspace\Project-laptop-shop\client\src\hooks\useDeviceDetection.js             | JavaScript |         36 |          8 |         11 |         55 |
+| e:\Workspace\Project-laptop-shop\client\src\layouts\MainLayout.js                   | JavaScript |          0 |         10 |          0 |         10 |
+| e:\Workspace\Project-laptop-shop\client\src\pages\About.js                          | JavaScript |         18 |          0 |          0 |         18 |
+| e:\Workspace\Project-laptop-shop\client\src\pages\FavoriteProduct.js                | JavaScript |          9 |          0 |          1 |         10 |
+| e:\Workspace\Project-laptop-shop\client\src\pages\Feedback.js                       | JavaScript |       -392 |         -9 |        -16 |       -417 |
+| e:\Workspace\Project-laptop-shop\client\src\pages\Home.js                           | JavaScript |         42 |          2 |          0 |         44 |
+| e:\Workspace\Project-laptop-shop\client\src\pages\News.js                           | JavaScript |          9 |          0 |          0 |          9 |
+| e:\Workspace\Project-laptop-shop\client\src\pages\Product.js                        | JavaScript |         11 |          0 |          0 |         11 |
+| e:\Workspace\Project-laptop-shop\client\src\pages\Setting.js                        | JavaScript |         75 |          3 |          6 |         84 |
+| e:\Workspace\Project-laptop-shop\client\src\styles\README.md                        | HTML       |         82 |          0 |         15 |         97 |
+| e:\Workspace\Project-laptop-shop\client\src\styles\animations.css                   | CSS        |        120 |          6 |         20 |        146 |
+| e:\Workspace\Project-laptop-shop\client\src\styles\antd-overrides.css               | CSS        |        110 |         14 |         30 |        154 |
+| e:\Workspace\Project-laptop-shop\client\src\styles\components.css                   | CSS        |        137 |         11 |         28 |        176 |
+| e:\Workspace\Project-laptop-shop\client\src\styles\content-wrapper.css              | CSS        |        213 |         13 |         38 |        264 |
+| e:\Workspace\Project-laptop-shop\client\src\styles\index.css                        | CSS        |         17 |          3 |          2 |         22 |
+| e:\Workspace\Project-laptop-shop\client\src\styles\utilities.css                    | CSS        |         59 |          7 |         17 |         83 |
+| e:\Workspace\Project-laptop-shop\client\src\trash\Feedback.js                       | JavaScript |        392 |          9 |         16 |        417 |
+| e:\Workspace\Project-laptop-shop\client\src\utils\deviceUtils.js                    | JavaScript |         40 |          7 |         13 |         60 |
+| Total                                                                               |            |      1,576 |         93 |        285 |      1,954 |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

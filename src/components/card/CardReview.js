@@ -3,7 +3,7 @@ import { FaStar } from 'react-icons/fa';
 
 const CardReview = ({ name, avatarUrl, rating, comment }) => {
     return (
-        <div className="bg-white border border-gray-200 rounded-xl shadow hover:shadow-md transition duration-300 p-4 max-w-sm w-full">
+        <div className="bg-white border border-gray-200 rounded-xl shadow hover:shadow-md transition duration-300 p-4 w-full">
             {/* Avatar + Name */}
             <div className="flex items-center gap-4 mb-3">
                     <img

@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { logUserActivity } from '../../utils/auth';
 import axiosClient from "../../config/axios";
 import { Form, Input, Button, Row, Col } from 'antd';
+import useDeviceDetection from '../../hooks/useDeviceDetection';
 
 const SignUp = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
+    const { isMobile, isTablet, isDesktop } = useDeviceDetection();
 
     // Animated values for charts
     const [userGrowth, setUserGrowth] = useState(0);
@@ -120,6 +122,215 @@ const SignUp = () => {
         }
     };
 
+    // Mobile/Tablet Layout
+    if (isMobile || isTablet) {
+        return (
+            <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+                {/* Mobile Header */}
+                <div className="text-center mb-6 sm:mb-8">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Tạo tài khoản mới</h2>
+                    <p className="text-gray-600 text-sm sm:text-base">Tham gia cộng đồng mua sắm thông minh.</p>
+                </div>
+
+                {/* Mobile Form Container */}
+                <div className="max-w-md mx-auto bg-white rounded-xl shadow-xl p-4 sm:p-6 border border-gray-400">
+                    {/* Demo Info */}
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+                        <p className="text-green-700 text-xs sm:text-sm text-center">
+                            <i className="fas fa-info-circle mr-1"></i>
+                            Demo User: user@gmail.com / 123456 (Đã điền sẵn)
+                        </p>
+                    </div>
+
+                    <Form
+                        form={form}
+                        name="signup"
+                        layout="vertical"
+                        onFinish={onSubmit}
+                        autoComplete="off"
+                        className="space-y-3"
+                    >
+                        {/* Full Name */}
+                        <Form.Item
+                            label={<span className="text-sm sm:text-base">Họ và tên</span>}
+                            name="fullname"
+                            rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
+                        >
+                            <Input
+                                prefix={<FaUser className="text-gray-400" />}
+                                placeholder="Họ và tên"
+                                autoComplete="off"
+                                disabled={loading}
+                                size={isMobile ? "middle" : "large"}
+                                className="py-2 px-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            />
+                        </Form.Item>
+
+                        {/* Email */}
+                        <Form.Item
+                            label={<span className="text-sm sm:text-base">Email</span>}
+                            name="email"
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập email' },
+                                { type: 'email', message: 'Email không hợp lệ' },
+                            ]}
+                        >
+                            <Input
+                                prefix={<FaEnvelope className="text-gray-400" />}
+                                placeholder="E-mail"
+                                autoComplete="off"
+                                disabled={loading}
+                                size={isMobile ? "middle" : "large"}
+                                className="py-2 px-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            />
+                        </Form.Item>
+
+                        {/* Phone */}
+                        <Form.Item
+                            label={<span className="text-sm sm:text-base">Số điện thoại</span>}
+                            name="phone"
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập số điện thoại' },
+                                { pattern: /^[0-9]{9,12}$/, message: 'Số điện thoại không hợp lệ' },
+                            ]}
+                        >
+                            <Input
+                                prefix={<FaPhone className="text-gray-400" />}
+                                placeholder="Số điện thoại"
+                                autoComplete="off"
+                                disabled={loading}
+                                size={isMobile ? "middle" : "large"}
+                                className="py-2 px-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            />
+                        </Form.Item>
+
+                        {/* Address */}
+                        <Form.Item
+                            label={<span className="text-sm sm:text-base">Địa chỉ</span>}
+                            name="address"
+                            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+                        >
+                            <Input
+                                prefix={<FaMapMarkerAlt className="text-gray-400" />}
+                                placeholder="Địa chỉ"
+                                autoComplete="off"
+                                disabled={loading}
+                                size={isMobile ? "middle" : "large"}
+                                className="py-2 px-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            />
+                        </Form.Item>
+
+                        {/* Password */}
+                        <Form.Item
+                            label={<span className="text-sm sm:text-base">Mật khẩu</span>}
+                            name="password"
+                            hasFeedback
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập mật khẩu' },
+                                { min: 6, message: 'Mật khẩu tối thiểu 6 ký tự' },
+                            ]}
+                        >
+                            <Input.Password
+                                prefix={<FaLock className="text-gray-400" />}
+                                placeholder="Mật khẩu"
+                                autoComplete="new-password"
+                                disabled={loading}
+                                size={isMobile ? "middle" : "large"}
+                                className="py-2 px-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            />
+                        </Form.Item>
+
+                        {/* Confirm Password */}
+                        <Form.Item
+                            label={<span className="text-sm sm:text-base">Xác nhận mật khẩu</span>}
+                            name="confirmPassword"
+                            dependencies={["password"]}
+                            hasFeedback
+                            rules={[
+                                { required: true, message: 'Vui lòng xác nhận mật khẩu' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Mật khẩu không khớp'));
+                                    },
+                                }),
+                            ]}
+                        >
+                            <Input.Password
+                                prefix={<FaLock className="text-gray-400" />}
+                                placeholder="Xác nhận mật khẩu"
+                                autoComplete="new-password"
+                                disabled={loading}
+                                size={isMobile ? "middle" : "large"}
+                                className="py-2 px-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            />
+                        </Form.Item>
+
+                        <Form.Item>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                size={isMobile ? "middle" : "large"}
+                                className="w-full bg-black hover:bg-gray-800 text-white border-0"
+                                loading={loading}
+                                disabled={loading}
+                            >
+                                Sign Up
+                            </Button>
+                        </Form.Item>
+                    </Form>
+
+                    {/* Bottom actions: divider + social + link */}
+                    <div className="mt-4 sm:mt-5">
+                        <div className="flex items-center mb-4 sm:mb-6">
+                            <div className="flex-1 h-px bg-gray-200"></div>
+                            <span className="px-3 sm:px-4 text-gray-400 text-xs sm:text-sm">Or sign up with</span>
+                            <div className="flex-1 h-px bg-gray-200"></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                            <Button 
+                                size={isMobile ? "small" : "middle"} 
+                                disabled={loading} 
+                                className="flex items-center justify-center border border-gray-300 hover:bg-gray-50 text-xs sm:text-sm"
+                            >
+                                <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+                                Google
+                            </Button>
+                            <Button 
+                                size={isMobile ? "small" : "middle"} 
+                                disabled={loading} 
+                                className="flex items-center justify-center border border-gray-300 hover:bg-gray-50 text-xs sm:text-sm"
+                            >
+                                <img src="https://img.icons8.com/ios-filled/50/000000/mac-os.png" alt="Apple" className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+                                Apple
+                            </Button>
+                        </div>
+
+                        <div className="text-center text-gray-600 mt-4 sm:mt-6">
+                            <span className="text-sm">Already have an account? </span>
+                            <a href="#" onClick={() => navigate("/signin")} className="text-green-600 hover:underline text-sm">
+                                Sign in now
+                            </a>
+                        </div>
+
+                        {/* Terms & Privacy */}
+                        <div className="mt-3 sm:mt-4 text-center">
+                            <p className="text-xs text-gray-600">
+                                By signing up, you agree to our{" "}
+                                <button className="text-green-600 hover:underline">Terms of Service</button>{" "}
+                                and{" "}
+                                <button className="text-green-600 hover:underline">Privacy Policy</button>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Desktop Layout (unchanged)
     return (
         <div className="w-full h-screen flex">
             <div className="w-full h-full flex flex-col  lg:flex-row">

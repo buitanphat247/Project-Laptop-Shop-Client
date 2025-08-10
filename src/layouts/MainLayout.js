@@ -12,6 +12,7 @@ import { Outlet } from 'react-router-dom'; // Outlet để render các route con
  *
  * Layout tổng cho các trang ngoài (khách, user, landing page...)
  * Đảm bảo mọi trang đều có Header, Footer và vùng nội dung chính ở giữa.
+ * Responsive design với breakpoints cho mobile, tablet và desktop.
  *
  * @param {object} props
  * @param {React.ReactNode} props.children - Nội dung con (ít dùng, chủ yếu dùng <Outlet />)
@@ -19,8 +20,17 @@ import { Outlet } from 'react-router-dom'; // Outlet để render các route con
  * Sử dụng với React Router:
  * <Route element={<MainLayout />}>...</Route>
  *
+ * Responsive Features:
+ * - Mobile (< 640px): px-4, py-4, mt-16 (64px)
+ * - Tablet (640px - 1023px): px-6, py-6, mt-20 (80px)
+ * - Desktop (1024px+): px-8, py-8, mt-16 (64px)
+ * - Max width: max-w-7xl để tránh nội dung quá rộng
+ * - Flexbox layout: min-h-screen flex flex-col
+ * - Main content: flex-1 để chiếm hết không gian còn lại
+ * - Margin top: Tạo khoảng cách phù hợp với header
+ *
  * - <Header />: Hiển thị thanh điều hướng trên cùng
- * - <main>: Vùng nội dung chính, căn giữa, padding
+ * - <main>: Vùng nội dung chính, căn giữa, padding responsive
  * - <Outlet />: Nơi render các component theo route con
  * - <Footer />: Hiển thị cuối trang
  */
@@ -30,7 +40,7 @@ const MainLayout = ({ children }) => {
             {/* Header cố định trên cùng */}
             <Header />
             {/* Nội dung chính, căn giữa, padding */}
-            <main className='container mx-auto py-5'>
+            <main className='container mx-auto  pb-5 lg:mt-5 '>
                 {/*
                   Sử dụng <Outlet /> để render các route con của React Router.
                   Nếu muốn render children trực tiếp, có thể dùng {children} thay cho <Outlet />

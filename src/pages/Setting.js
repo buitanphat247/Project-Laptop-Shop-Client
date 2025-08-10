@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Layout, Menu, Spin, message } from 'antd';
-import { UserOutlined, LockOutlined, BellOutlined, GlobalOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Layout, Menu, Spin, message, Drawer, Button } from 'antd';
+import { UserOutlined, LockOutlined, BellOutlined, GlobalOutlined, QuestionCircleOutlined, MenuOutlined } from '@ant-design/icons';
 import AccountInfo from './setting/AccountInfo';
 import NotificationSettings from './setting/NotificationSettings';
 import ChangePassword from './setting/ChangePassword';
@@ -8,6 +8,7 @@ import LanguageRegion from './setting/LanguageRegion';
 import HelpSupport from './setting/HelpSupport';
 import { getUserProfile } from '../utils/auth';
 import axiosClient from '../config/axios';
+import useDeviceDetection from '../hooks/useDeviceDetection';
 
 const { Sider, Content } = Layout;
 
@@ -16,6 +17,9 @@ const Setting = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    
+    const { isMobile, isTablet, isDesktop } = useDeviceDetection();
 
     // Lấy user ID từ localStorage hoặc auth context
     const currentUser = getUserProfile();
@@ -93,6 +97,14 @@ const Setting = () => {
             refreshUserData();
         }, 1000);
     }, [refreshUserData]);
+
+    // Handle menu selection for mobile
+    const handleMenuSelect = (key) => {
+        setSelectedMenu(key);
+        if (isMobile || isTablet) {
+            setMobileMenuOpen(false);
+        }
+    };
 
     // Rest of the component remains the same...
     const renderContent = () => {
@@ -197,8 +209,80 @@ const Setting = () => {
         },
     ];
 
+    // Mobile/Tablet Layout
+    if (isMobile || isTablet) {
+        return (
+            <div className="min-h-screen bg-gray-50">
+                {/* Mobile Header */}
+                <div className="bg-white shadow-sm border-b border-gray-200 p-4">
+                    <div className="flex items-center justify-between">
+                        <Button
+                            type="text"
+                            icon={<MenuOutlined />}
+                            onClick={() => setMobileMenuOpen(true)}
+                            className="text-lg"
+                        />
+                        <h1 className="text-lg font-semibold text-gray-900">Cài đặt</h1>
+                        <div className="w-8"></div> {/* Spacer for centering */}
+                    </div>
+                </div>
+
+                {/* Mobile Content */}
+                <div className="p-4">
+                    {renderContent()}
+                </div>
+
+                {/* Mobile Menu Drawer */}
+                <Drawer
+                    title={
+                        <div className="flex items-center space-x-3">
+                            {userInfo ? (
+                                <>
+                                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+                                        {userInfo.fullName?.charAt(0).toUpperCase() || 'U'}
+                                    </div>
+                                    <div>
+                                        <div className="font-medium text-gray-900">
+                                            {userInfo.fullName || 'Người dùng'}
+                                        </div>
+                                        <div className="text-xs text-gray-500">
+                                            {userInfo.email || 'N/A'}
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="text-gray-500">Thông tin người dùng</div>
+                            )}
+                        </div>
+                    }
+                    placement="left"
+                    onClose={() => setMobileMenuOpen(false)}
+                    open={mobileMenuOpen}
+                    width={280}
+                    className="lg:hidden"
+                >
+                    <Menu
+                        mode="inline"
+                        selectedKeys={[selectedMenu]}
+                        onClick={(e) => handleMenuSelect(e.key)}
+                        items={menuItems}
+                        className="border-0"
+                    />
+                    
+                    {process.env.NODE_ENV === 'development' && userInfo && (
+                        <div className="p-3 border-t border-gray-200 text-xs text-gray-500 mt-4">
+                            <div>ID: {userInfo.id}</div>
+                            <div>Role: {userInfo.role}</div>
+                        </div>
+                    )}
+                </Drawer>
+            </div>
+        );
+    }
+
+    // Desktop Layout (unchanged)
     return (
-        <Layout className=" rounded-xl overflow-hidden">
+        <Layout className="rounded-xl overflow-hidden">
             <Sider width={280} className="bg-white shadow-md">
                 {/* User info header */}
                 <div className="p-4 border-b border-gray-200">

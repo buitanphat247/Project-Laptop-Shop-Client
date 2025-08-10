@@ -282,8 +282,15 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
                     .notifications-scroll {
                         scrollbar-width: thin;
                         scrollbar-color: #c1c1c1 #f1f1f1;
-                        max-height: calc(100vh - 200px);
+                        max-height: calc(100vh - 180px);
                         height: 100%;
+                    }
+                    
+                    /* Mobile responsive adjustments */
+                    @media (max-width: 640px) {
+                        .notifications-scroll {
+                            max-height: calc(100vh - 160px);
+                        }
                     }
                     
                     /* Ensure proper flex behavior */
@@ -300,29 +307,7 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
                         min-height: 0;
                     }
 
-                    /* Disabled overlay styles */
-                    .disabled-overlay {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        background: rgba(0, 0, 0, 0.7);
-                        z-index: 1000;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        backdrop-filter: blur(2px);
-                    }
 
-                    .disabled-message {
-                        background: white;
-                        padding: 2rem;
-                        border-radius: 12px;
-                        text-align: center;
-                        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-                        max-width: 300px;
-                    }
                 `}
             </style>
             <div className={`fixed inset-0 z-50 flex justify-end transition-all duration-200 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
@@ -333,24 +318,18 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
                 ></div>
             
             {/* Panel */}
-            <div className={`relative w-96 h-full bg-white shadow-2xl transform transition-all duration-200 ease-out panel-container ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                {/* Disabled Overlay */}
-                <div className="disabled-overlay">
-                    <div className="disabled-message">
-                        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                        </div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                            Tính năng đã bị vô hiệu hóa
-                        </h3>
-                        <p className="text-sm text-gray-600 mb-4">
-                            Giao diện thông báo hiện tại đang được bảo trì và không khả dụng.
-                        </p>
+            <div className={`relative w-full sm:w-96 h-full bg-white shadow-2xl transform transition-all duration-200 ease-out panel-container ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                {/* Disabled Overlay - Đang phát triển */}
+                <div className="absolute inset-0 bg-gray-100 bg-opacity-90 z-10 flex items-center justify-center">
+                    <div className="text-center">
+                        <div className="text-6xl mb-4">🔒</div>
+                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Đang phát triển</h3>
+                        <p className="text-gray-500 mb-6">Tính năng thông báo sẽ sớm có mặt!</p>
+                        
+                        {/* Nút đóng ở dưới cùng */}
                         <button 
                             onClick={onClose}
-                            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                            className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all duration-200 transform hover:scale-105 font-medium shadow-md"
                         >
                             Đóng
                         </button>
@@ -361,13 +340,13 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
 
                 {/* Header */}
                 <div 
-                    className={`flex-shrink-0 flex items-center justify-between p-6 border-b border-gray-200 ${isOpen ? 'animate-fadeIn' : 'animate-fadeOut'}`} 
+                    className={`flex-shrink-0 flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 ${isOpen ? 'animate-fadeIn' : 'animate-fadeOut'}`} 
                     style={{animationDelay: '100ms'}}
                 >
-                    <h2 className="text-xl font-semibold text-gray-900">Notifications</h2>
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Notifications</h2>
                     <div className="flex items-center space-x-2">
-                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 transform hover:scale-110" disabled>
-                            <FullscreenOutlined className="text-gray-400" />
+                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 transform hover:scale-110">
+                            <FullscreenOutlined className="text-gray-600" />
                         </button>
                         <button 
                             className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 transform hover:scale-110"
@@ -380,51 +359,48 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
 
                 {/* Tabs */}
                 <div 
-                    className={`flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-gray-200 ${isOpen ? 'animate-fadeIn' : 'animate-fadeOut'}`} 
+                    className={`flex-shrink-0 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 ${isOpen ? 'animate-fadeIn' : 'animate-fadeOut'}`} 
                     style={{animationDelay: '200ms'}}
                 >
-                    <div className="flex space-x-6">
+                    <div className="flex space-x-3 sm:space-x-6">
                         <button
                             onClick={() => setActiveTab('all')}
-                            className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
+                            className={`relative px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
                                 activeTab === 'all' 
                                     ? 'text-purple-600' 
                                     : 'text-gray-500 hover:text-gray-700'
                             }`}
-                            disabled
                         >
                             All
                             {unreadCount > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center animate-pulse">
+                                <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 min-w-[16px] sm:min-w-[20px] text-center animate-pulse">
                                     {unreadCount}
                                 </span>
                             )}
                         </button>
                         <button
                             onClick={() => setActiveTab('unread')}
-                            className={`px-3 py-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
+                            className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
                                 activeTab === 'unread' 
                                     ? 'text-purple-600' 
                                     : 'text-gray-500 hover:text-gray-700'
                             }`}
-                            disabled
                         >
                             Unread
                         </button>
                         <button
                             onClick={() => setActiveTab('mentions')}
-                            className={`px-3 py-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
+                            className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
                                 activeTab === 'mentions' 
                                     ? 'text-purple-600' 
                                     : 'text-gray-500 hover:text-gray-700'
                             }`}
-                            disabled
                         >
                             Mentions
                         </button>
                     </div>
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 transform hover:scale-110" disabled>
-                        <SettingOutlined className="text-gray-400" />
+                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 transform hover:scale-110">
+                        <SettingOutlined className="text-gray-600" />
                     </button>
                 </div>
 
@@ -439,14 +415,14 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
                                 animation: isOpen ? 'slideInFromRight 0.2s ease-out forwards' : 'slideOutToRight 0.2s ease-in forwards'
                             }}
                         >
-                            <div className="p-4 hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.02]">
-                                <div className="flex items-start space-x-3">
+                            <div className="p-3 sm:p-4 hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.02]">
+                                <div className="flex items-start space-x-2 sm:space-x-3">
                                     {/* Avatar */}
                                     <div className="flex-shrink-0">
                                         <img
                                             src={notification.avatar}
                                             alt={notification.user}
-                                            className="w-8 h-8 rounded-full object-cover"
+                                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover"
                                         />
                                     </div>
 
@@ -454,7 +430,7 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-start justify-between">
                                             <div className="flex-1">
-                                                <p className="text-sm text-gray-900">
+                                                <p className="text-xs sm:text-sm text-gray-900">
                                                     <span className="font-medium">{notification.user}</span>
                                                     {' '}
                                                     <span className="text-gray-600">{notification.action}</span>
@@ -465,11 +441,11 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
 
                                                 {/* Message bubble for replies */}
                                                 {notification.type === 'reply' && (
-                                                    <div className={`mt-2 p-3 rounded-lg ${notification.color}`}>
-                                                        <p className="text-sm text-gray-800 mb-2">
+                                                    <div className={`mt-2 p-2 sm:p-3 rounded-lg ${notification.color}`}>
+                                                        <p className="text-xs sm:text-sm text-gray-800 mb-2">
                                                             {notification.message}
                                                         </p>
-                                                        <button className="text-sm text-purple-600 font-medium hover:text-purple-700" disabled>
+                                                        <button className="text-xs sm:text-sm text-purple-600 font-medium hover:text-purple-700">
                                                             Reply
                                                         </button>
                                                     </div>
@@ -478,11 +454,11 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
                                                 {/* File info */}
                                                 {notification.type === 'file' && (
                                                     <div className="mt-2 flex items-center space-x-2">
-                                                        <FileTextOutlined className="text-gray-500" />
-                                                        <span className="text-sm text-gray-700">
+                                                        <FileTextOutlined className="text-gray-500 text-sm" />
+                                                        <span className="text-xs sm:text-sm text-gray-700 truncate">
                                                             {notification.file}
                                                         </span>
-                                                        <span className="text-xs text-gray-500">
+                                                        <span className="text-xs text-gray-500 hidden sm:inline">
                                                             {notification.fileSize}
                                                         </span>
                                                     </div>

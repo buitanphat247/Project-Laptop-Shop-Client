@@ -5,8 +5,10 @@ import NewsFilters from '../components/filters/NewsFilters';
 import NewsCard from '../components/card/NewsCard';
 import { FaNewspaper } from 'react-icons/fa';
 import axiosClient from '../config/axios';
+import useDeviceDetection from '../hooks/useDeviceDetection';
 
 const News = () => {
+    const { isDesktop } = useDeviceDetection();
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
@@ -178,7 +180,7 @@ const News = () => {
             {/* News Grid */}
             {!loading && news.length > 0 && (
                 <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+                   <div className="wrapper grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                         {news.map((article, index) => (
                             <NewsCard
                                 key={article.id || `news-${currentPage}-${index}`}
@@ -187,8 +189,8 @@ const News = () => {
                         ))}
                     </div>
 
-                    {/* Pagination */}
-                    <div className="flex justify-center mb-8">
+                       {/* Pagination */}
+                       <div className="flex justify-center mb-6 sm:mb-8 lg:px-8">
                         <Pagination
                             current={currentPage}
                             total={totalNews}
@@ -197,19 +199,26 @@ const News = () => {
                             showSizeChanger={false}
                             showQuickJumper
                             showTotal={(total, range) =>
-                                `${range[0]}-${range[1]} của ${total} bài viết`
+                                `${range[0]}-${range[1]} của ${total} sản phẩm`
                             }
-                            size="default"
+                            size={isDesktop ? "default" : "small"}
                             className="bg-white p-4 rounded-lg shadow-sm"
+                            responsive={{
+                                hideOnSinglePage: true,
+                                showSizeChanger: false,
+                                showQuickJumper: false,
+                                showTotal: false
+                            }}
+                            simple={!isDesktop}
                         />
                     </div>
 
-                    {/* News Summary */}
-                    <div className="bg-gray-50 p-4 rounded-lg mb-4 text-center text-sm text-gray-600">
-                        <p>
-                            Hiển thị <strong>{news.length}</strong> bài viết
+                    {/* Product Summary - Chỉ hiển thị trên desktop */}
+                    <div className="hidden lg:block bg-gray-50 p-4 rounded-lg mb-4 text-center text-sm text-gray-600 lg:px-8">
+                        <p className="leading-relaxed">
+                            Hiển thị <strong>{news ? news.length : 0}</strong> sản phẩm
                             trong trang <strong>{currentPage}</strong>
-                            / Tổng cộng <strong>{totalNews}</strong> bài tin tức
+                            / Tổng cộng <strong>{totalNews}</strong> sản phẩm laptop
                         </p>
                     </div>
                 </>

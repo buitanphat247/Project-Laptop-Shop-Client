@@ -7,6 +7,7 @@ import { FaBox, FaLaptop } from 'react-icons/fa';
 import axiosClient from '../config/axios';
 import { categoryOptions as defaultCategoryOptions } from '../config/constant';
 import { getUserProfile } from '../utils';
+import useDeviceDetection from '../hooks/useDeviceDetection';
 
 const FavoriteProduct = () => {
     const [products, setProducts] = useState([]);
@@ -16,6 +17,7 @@ const FavoriteProduct = () => {
     const [error, setError] = useState(null);
     const [filtersVisible, setFiltersVisible] = useState(false);
     const [categories, setCategories] = useState([]);
+    const { isDesktop } = useDeviceDetection();
 
     // Filter states
     const [filters, setFilters] = useState({
@@ -221,7 +223,8 @@ const FavoriteProduct = () => {
             {/* Products Grid */}
             {!loading && products && products.length > 0 && (
                 <>
-                    <div className="wrapper grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+                    <div className="wrapper grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+
                         {products.map((product, index) => (
                             <CardProduct
                                 key={product.id || `product-${currentPage}-${index}`}
@@ -241,7 +244,7 @@ const FavoriteProduct = () => {
                     </div>
 
                     {/* Pagination */}
-                    <div className="flex justify-center mb-8">
+                    <div className="flex justify-center mb-6 sm:mb-8 lg:px-8">
                         <Pagination
                             current={currentPage}
                             total={totalProducts}
@@ -252,14 +255,21 @@ const FavoriteProduct = () => {
                             showTotal={(total, range) =>
                                 `${range[0]}-${range[1]} của ${total} sản phẩm`
                             }
-                            size="default"
+                            size={isDesktop ? "default" : "small"}
                             className="bg-white p-4 rounded-lg shadow-sm"
+                            responsive={{
+                                hideOnSinglePage: true,
+                                showSizeChanger: false,
+                                showQuickJumper: false,
+                                showTotal: false
+                            }}
+                            simple={!isDesktop}
                         />
                     </div>
 
-                    {/* Product Summary */}
-                    <div className="bg-gray-50 p-4 rounded-lg mb-4 text-center text-sm text-gray-600">
-                        <p>
+                    {/* Product Summary - Chỉ hiển thị trên desktop */}
+                    <div className="hidden lg:block bg-gray-50 p-4 rounded-lg mb-4 text-center text-sm text-gray-600 lg:px-8">
+                        <p className="leading-relaxed">
                             Hiển thị <strong>{products ? products.length : 0}</strong> sản phẩm
                             trong trang <strong>{currentPage}</strong>
                             / Tổng cộng <strong>{totalProducts}</strong> sản phẩm laptop

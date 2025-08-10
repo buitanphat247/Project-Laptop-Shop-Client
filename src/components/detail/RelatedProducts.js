@@ -6,16 +6,16 @@ import CardProduct from '../card/CardProduct';
 const { Title, Text } = Typography;
 
 const RelatedProducts = ({ loadingRelated, relatedProducts, FALLBACK_IMAGE }) => (
-    <div className="mt-6 bg-white border rounded-lg p-5">
-        <Title level={4} className="mb-3">Sản phẩm liên quan</Title>
-        <Divider className="my-4" />
+    <div className="mt-4 sm:mt-6 border rounded-lg p-3 sm:p-5">
+        <Title level={4} className="mb-2 sm:mb-3 text-base sm:text-lg">Sản phẩm liên quan</Title>
+        <Divider className="my-2 sm:my-4" />
 
         {loadingRelated ? (
-            <div className="text-center py-8">
+            <div className="text-center py-6 sm:py-8">
                 <Spin tip="Đang tải sản phẩm liên quan..." />
             </div>
         ) : relatedProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
                 {relatedProducts.map((relatedProduct) => (
                     <CardProduct
                         key={relatedProduct.id}
@@ -30,9 +30,9 @@ const RelatedProducts = ({ loadingRelated, relatedProducts, FALLBACK_IMAGE }) =>
                 ))}
             </div>
         ) : (
-            <div className="text-center py-6 text-gray-500">
-                <StarOutlined className="text-2xl mb-3" />
-                <Text>Không có sản phẩm liên quan</Text>
+            <div className="text-center py-4 sm:py-6 text-gray-500">
+                <StarOutlined className="text-xl sm:text-2xl mb-2 sm:mb-3" />
+                <Text className="text-sm sm:text-base">Không có sản phẩm liên quan</Text>
             </div>
         )}
     </div>

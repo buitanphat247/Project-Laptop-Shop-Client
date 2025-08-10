@@ -6,8 +6,10 @@ import ProductFilters from '../components/filters/ProductFilters';
 import { FaBox, FaLaptop } from 'react-icons/fa';
 import axiosClient from '../config/axios';
 import { categoryOptions as defaultCategoryOptions } from '../config/constant';
+import { useDeviceDetection } from '../hooks/useDeviceDetection';
 
 const Product = () => {
+    const { isDesktop } = useDeviceDetection();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
@@ -152,27 +154,29 @@ const Product = () => {
 
     return (
         <>
-            <SectionBar
-                icon={<FaBox />}
-                title={`Sản phẩm công nghệ `}
-            />
+            <div>
+                <SectionBar
+                    icon={<FaBox />}
+                    title={`Sản phẩm công nghệ `}
+                />
 
-            {/* Filters Component */}
-            <ProductFilters
-                filters={filters}
-                setFilters={setFilters}
-                filtersVisible={filtersVisible}
-                setFiltersVisible={setFiltersVisible}
-                onFilterChange={handleFilterChange}
-                onSearch={handleSearch}
-                onClearFilters={clearFilters}
-                hasActiveFilters={hasActiveFilters}
-                categoryOptions={categories}
-            />
+                {/* Filters Component */}
+                <ProductFilters
+                    filters={filters}
+                    setFilters={setFilters}
+                    filtersVisible={filtersVisible}
+                    setFiltersVisible={setFiltersVisible}
+                    onFilterChange={handleFilterChange}
+                    onSearch={handleSearch}
+                    onClearFilters={clearFilters}
+                    hasActiveFilters={hasActiveFilters}
+                    categoryOptions={categories}
+                />
+            </div>
 
             {/* Loading State */}
             {loading && (
-                <div className="flex justify-center items-center min-h-96">
+                <div className="flex justify-center items-center min-h-80 sm:min-h-96 lg:px-8">
                     <Spin
                         size="large"
                         tip="Đang tải sản phẩm..."
@@ -182,14 +186,14 @@ const Product = () => {
 
             {/* Error State */}
             {error && !loading && (!products || products.length === 0) && (
-                <div className="flex flex-col items-center justify-center min-h-96">
+                <div className="flex flex-col items-center justify-center min-h-80 sm:min-h-96 lg:px-8">
                     <Empty
                         description={
                             <div className="text-center">
-                                <p className="text-gray-500 mb-2">{error}</p>
+                                <p className="text-gray-500 mb-2 text-sm sm:text-base">{error}</p>
                                 <button
                                     onClick={() => fetchProducts(currentPage)}
-                                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                                    className="px-3 sm:px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm"
                                 >
                                     Thử lại
                                 </button>
@@ -201,12 +205,12 @@ const Product = () => {
 
             {/* No Results */}
             {!loading && (!products || products.length === 0) && !error && (
-                <div className="flex flex-col items-center justify-center min-h-96">
+                <div className="flex flex-col items-center justify-center min-h-80 sm:min-h-96 lg:px-8">
                     <Empty
                         description={
                             <div className="text-center">
-                                <p className="text-gray-500 mb-2">Không tìm thấy sản phẩm nào phù hợp với bộ lọc</p>
-                                <Button onClick={clearFilters} type="primary">
+                                <p className="text-gray-500 mb-2 text-sm sm:text-base">Không tìm thấy sản phẩm nào phù hợp với bộ lọc</p>
+                                <Button onClick={clearFilters} type="primary" size="small" className="sm:text-base">
                                     Xóa bộ lọc
                                 </Button>
                             </div>
@@ -218,7 +222,7 @@ const Product = () => {
             {/* Products Grid */}
             {!loading && products && products.length > 0 && (
                 <>
-                    <div className="wrapper grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+                    <div className="wrapper grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 mb-6 sm:mb-8">
                         {products.map((product, index) => (
                             <CardProduct
                                 key={product.id || `product-${currentPage}-${index}`}
@@ -238,7 +242,7 @@ const Product = () => {
                     </div>
 
                     {/* Pagination */}
-                    <div className="flex justify-center mb-8">
+                    <div className="flex justify-center mb-6 sm:mb-8 lg:px-8">
                         <Pagination
                             current={currentPage}
                             total={totalProducts}
@@ -249,14 +253,21 @@ const Product = () => {
                             showTotal={(total, range) =>
                                 `${range[0]}-${range[1]} của ${total} sản phẩm`
                             }
-                            size="default"
+                            size={isDesktop ? "default" : "small"}
                             className="bg-white p-4 rounded-lg shadow-sm"
+                            responsive={{
+                                hideOnSinglePage: true,
+                                showSizeChanger: false,
+                                showQuickJumper: false,
+                                showTotal: false
+                            }}
+                            simple={!isDesktop}
                         />
                     </div>
 
-                    {/* Product Summary */}
-                    <div className="bg-gray-50 p-4 rounded-lg mb-4 text-center text-sm text-gray-600">
-                        <p>
+                    {/* Product Summary - Chỉ hiển thị trên desktop */}
+                    <div className="hidden lg:block bg-gray-50 p-4 rounded-lg mb-4 text-center text-sm text-gray-600 lg:px-8">
+                        <p className="leading-relaxed">
                             Hiển thị <strong>{products ? products.length : 0}</strong> sản phẩm
                             trong trang <strong>{currentPage}</strong>
                             / Tổng cộng <strong>{totalProducts}</strong> sản phẩm laptop

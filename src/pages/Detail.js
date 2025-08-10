@@ -57,7 +57,6 @@ const Detail = () => {
     const [loading, setLoading] = useState(true);
     const [loadingRelated, setLoadingRelated] = useState(false);
     const [error, setError] = useState(null);
-    const [quantity, setQuantity] = useState(1);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [isDescriptionModalVisible, setIsDescriptionModalVisible] = useState(false);
     const [isShareModalVisible, setIsShareModalVisible] = useState(false);

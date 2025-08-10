@@ -51,14 +51,26 @@ function CountdownTimer({ targetDate, bigText }) {
     }, [targetDate]);
 
     return (
-        <div className={`flex justify-center gap-4 md:gap-8 ${bigText ? 'text-3xl md:text-4xl font-extrabold' : 'text-2xl md:text-3xl font-bold'} text-gray-800`}>
-            <div className="flex flex-col items-center"><span>{String(timeLeft.days).padStart(2, '0')}</span><span className="text-xs md:text-base font-normal mt-1">Days</span></div>
-            <span>:</span>
-            <div className="flex flex-col items-center"><span>{String(timeLeft.hours).padStart(2, '0')}</span><span className="text-xs md:text-base font-normal mt-1">Hours</span></div>
-            <span>:</span>
-            <div className="flex flex-col items-center"><span>{String(timeLeft.minutes).padStart(2, '0')}</span><span className="text-xs md:text-base font-normal mt-1">Minutes</span></div>
-            <span>:</span>
-            <div className="flex flex-col items-center"><span>{String(timeLeft.seconds).padStart(2, '0')}</span><span className="text-xs md:text-base font-normal mt-1">Seconds</span></div>
+        <div className={`flex justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-8 ${bigText ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold' : 'text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold'} text-gray-800`}>
+            <div className="flex flex-col items-center">
+                <span className="bg-white rounded-lg px-2 py-1 shadow-sm">{String(timeLeft.days).padStart(2, '0')}</span>
+                <span className="text-xs sm:text-sm md:text-base font-normal mt-1">Days</span>
+            </div>
+            <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl">:</span>
+            <div className="flex flex-col items-center">
+                <span className="bg-white rounded-lg px-2 py-1 shadow-sm">{String(timeLeft.hours).padStart(2, '0')}</span>
+                <span className="text-xs sm:text-sm md:text-base font-normal mt-1">Hours</span>
+            </div>
+            <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl">:</span>
+            <div className="flex flex-col items-center">
+                <span className="bg-white rounded-lg px-2 py-1 shadow-sm">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                <span className="text-xs sm:text-sm md:text-base font-normal mt-1">Minutes</span>
+            </div>
+            <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl">:</span>
+            <div className="flex flex-col items-center">
+                <span className="bg-white rounded-lg px-2 py-1 shadow-sm">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                <span className="text-xs sm:text-sm md:text-base font-normal mt-1">Seconds</span>
+            </div>
         </div>
     );
 }
@@ -126,8 +138,11 @@ const Home = () => {
     }, []);
 
     if (loading) return (
-        <div className="flex justify-center items-center h-screen w-full">
-            <Spin size="large" tip="Đang tải dữ liệu trang chủ..." />
+        <div className="flex justify-center items-center h-screen w-full px-4">
+            <div className="text-center">
+                <Spin size="large" tip="Đang tải dữ liệu trang chủ..." />
+                {/* <p className="mt-4 text-gray-600 text-sm sm:text-base">Vui lòng chờ trong giây lát...</p> */}
+            </div>
         </div>
     );
 
@@ -135,11 +150,36 @@ const Home = () => {
     const countdownTarget = new Date(Date.now() + 4 * 24 * 60 * 60 * 1000 + 14 * 60 * 60 * 1000 + 48 * 60 * 1000 + 18 * 1000);
 
     return (
-        <div className='space-y-10'>
+        <div className='space-y-6 md:space-y-10'>
 
 
             {/* Swiper sản phẩm nổi bật */}
-            <Swiper slidesPerView={3} spaceBetween={30} pagination={{ clickable: true }} autoplay={{ delay: 2500, disableOnInteraction: false }} modules={[Autoplay, Pagination, Navigation]} className="mySwiper">
+            <Swiper 
+                slidesPerView={1}
+                spaceBetween={20}
+                // pagination={{ clickable: true }} 
+                autoplay={{ delay: 2500, disableOnInteraction: false }} 
+                modules={[Autoplay, Pagination, Navigation]} 
+                className="mySwiper"
+                breakpoints={{
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                        spaceBetween: 30,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    },
+                    1280: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    }
+                }}
+            >
                 {banners.map((item, idx) => (
                     <SwiperSlide key={idx}><CardBanner imageUrl={item.imageUrl} /></SwiperSlide>
                 ))}
@@ -158,7 +198,7 @@ const Home = () => {
             <div>
                 <SectionHeader title={'Sản phẩm bán chạy'} />
 
-                <div className="grid grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     {(() => {
                         // Lấy sản phẩm từ danh sách sản phẩm có sẵn
                         const firstCategory = Object.keys(allProductsByCategory)[0];
@@ -167,7 +207,7 @@ const Home = () => {
                         
                         if (selectedProducts.length === 0) {
                             return (
-                                <div className="col-span-2 text-center py-8 text-gray-500">
+                                <div className="col-span-1 md:col-span-2 text-center py-8 text-gray-500">
                                     Không có sản phẩm nào
                                 </div>
                             );
@@ -212,7 +252,7 @@ const Home = () => {
 
 
             <div className="bg-white rounded-xl overflow-hidden">
-                <div className='flex justify-around'>
+                <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4'>
                     {services.map((s, i) => <CardService key={i} icon={s.icon} title={s.title} />)}
                 </div>
             </div>
@@ -233,11 +273,15 @@ const Home = () => {
             <div>
                 <SectionHeader title="Tin tức" />
                 <Swiper
-                    slidesPerView={1}
+                    slidesPerView={2}
                     spaceBetween={20}
-                    pagination={{ clickable: true, dynamicBullets: true }}
+                    // pagination={{ clickable: true, dynamicBullets: true }}
                     autoplay={{ delay: 2500, disableOnInteraction: false }}
-                    breakpoints={{ 640: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } }}
+                    breakpoints={{ 
+                        640: { slidesPerView: 2, spaceBetween: 5 }, 
+                        768: { slidesPerView: 2, spaceBetween: 20 },
+                        1024: { slidesPerView: 4, spaceBetween: 20 } 
+                    }}
                     modules={[Autoplay, Pagination]}
                     className="newsSwiper"
                 >
@@ -268,7 +312,7 @@ const Home = () => {
 
 
             {/* Deals of the Day Section - Modern Card Style Demo */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                 <CardPromoHalfImage
                     title={"Purely Fresh\nVegetables"}
                     desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
@@ -303,7 +347,7 @@ const Home = () => {
 const CategorySection = ({ name, products }) => (
     <div>
         <SectionHeader title={name} />
-        <div className="wrapper grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="wrapper grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
             {products.length > 0 ? products.map(p => (
                 <CardProduct
                     key={p.id}

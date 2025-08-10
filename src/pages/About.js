@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Spin } from 'antd';
+import { CommentOutlined, InfoCircleOutlined, EnvironmentOutlined, PhoneOutlined, MailOutlined, } from '@ant-design/icons';
 import CardReview from '../components/card/CardReview';
+import { Spin } from 'antd';
 
 const reviews = [
     {
@@ -74,7 +75,7 @@ const About = () => {
     }
 
     return (
-        <div className='space-y-8'>
+        <div className='space-y-5'>
             {/* Tiêu đề */}
             <h1 className="text-4xl font-bold text-blue-600">Về chúng tôi</h1>
 
@@ -97,19 +98,33 @@ const About = () => {
                         Đội ngũ nhân viên nhiệt tình, sẵn sàng tư vấn để bạn chọn được sản phẩm phù hợp với nhu cầu.
                     </p>
                     <div>
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-3">📌 Thông tin liên hệ</h2>
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-3">
+                            <InfoCircleOutlined className="mr-2 text-blue-500" />Thông tin liên hệ
+                        </h2>
                         <ul className="text-gray-700 leading-relaxed text-lg">
-                            <li>📍 Địa chỉ: 123 Nguyễn Văn A, TP. Bà Rịa</li>
-                            <li>📞 Hotline: 0909 999 999</li>
-                            <li>📧 Email: support@ntklaptop.vn</li>
+                            <li>
+                                <EnvironmentOutlined className="mr-2 text-red-500" />
+                                Địa chỉ: 123 Nguyễn Văn A, TP. Bà Rịa
+                            </li>
+                            <li>
+                                <PhoneOutlined className="mr-2 text-green-500" />
+                                Hotline: 0909 999 999
+                            </li>
+                            <li>
+                                <MailOutlined className="mr-2 text-blue-500" />
+                                Email: support@ntklaptop.vn
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div className="space-y-6">
-                <h2 className="text-2xl font-semibold text-gray-800">💬 Đánh giá từ khách hàng</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="space-y-4">
+                <h2 className="text-2xl font-semibold text-gray-800">
+                    <CommentOutlined className="mr-2 text-blue-500" />
+                    Đánh giá từ khách hàng
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 gap-6">
                     {reviews.map((review, index) => (
                         <CardReview
                             key={index}
@@ -124,7 +139,10 @@ const About = () => {
 
             {/* Google Maps */}
             <div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-3">🗺️ Bản đồ</h2>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-3">
+                    <EnvironmentOutlined className="mr-2 text-blue-500" />
+                    Bản đồ
+                </h2>
                 <div className="w-full h-96 rounded-lg overflow-hidden shadow-md">
                     <iframe
                         title="Google Map"

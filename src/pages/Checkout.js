@@ -130,7 +130,7 @@ const Checkout = () => {
                             </svg>
                         </div>
 
-                        <style jsx>{`
+                        <style>{`
                             @keyframes gentleBounce {
                                 0%, 20%, 50%, 80%, 100% {
                                     transform: translateY(0);
@@ -246,7 +246,7 @@ const Checkout = () => {
                         <CheckCircleOutlined className="text-green-500 text-4xl animate-pulse" />
                             </div>
 
-                    <style jsx>{`
+                    <style>{`
                         @keyframes gentleBounce {
                             0%, 20%, 50%, 80%, 100% {
                                 transform: translateY(0);

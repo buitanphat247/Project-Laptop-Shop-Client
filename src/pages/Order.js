@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Tag, Modal, Descriptions, Spin, Empty, Card, Badge, Avatar, Progress } from 'antd';
+import { Button, Table, Tag, Modal, Descriptions, Spin, Empty, Card, Badge, Avatar, Progress, Input } from 'antd';
 import TableDashboard from '../components/dashboard/TableDashboard';
 import { useParams, useNavigate } from 'react-router-dom';
+import useDeviceDetection from '../hooks/useDeviceDetection';
 import {
     ShoppingCartOutlined,
     DollarOutlined,
     CalendarOutlined,
     UserOutlined,
+    ArrowRightOutlined,
+    ArrowLeftOutlined,
     PhoneOutlined,
     EnvironmentOutlined,
     EyeOutlined,
-    ArrowLeftOutlined,
     CheckCircleOutlined,
     ClockCircleOutlined,
     CloseCircleOutlined,
     CarOutlined,
     FileTextOutlined,
-    StarOutlined
+    StarOutlined,
+    SearchOutlined
 } from '@ant-design/icons';
 import axiosClient from '../config/axios';
 import { getUserProfile } from '../utils/auth';
@@ -65,6 +68,14 @@ const Order = () => {
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const { isMobile, isTablet, isDesktop } = useDeviceDetection();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [mobilePagination, setMobilePagination] = useState({
+        current: 1,
+        pageSize: 5,
+        total: 0
+    });
+    const [pageInputValue, setPageInputValue] = useState('1');
 
     // Utility function để delay 250ms
     const delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
@@ -275,8 +286,18 @@ const Order = () => {
     useEffect(() => {
         fetchOrders(pagination.current, pagination.pageSize);
         fetchTotalQuantity(); // Fetch tổng số lượng từ tất cả đơn hàng
+        // Cập nhật mobile pagination
+        setMobilePagination(prev => ({
+            ...prev,
+            total: pagination.total
+        }));
         // eslint-disable-next-line
-    }, [userId]);
+    }, [userId, pagination.total]);
+
+    // Cập nhật pageInputValue khi mobilePagination.current thay đổi
+    useEffect(() => {
+        setPageInputValue(mobilePagination.current.toString());
+    }, [mobilePagination.current]);
 
     // Xử lý chuyển trang
     const handleTableChange = async (paginationData) => {
@@ -314,6 +335,325 @@ const Order = () => {
 
 
 
+    // Mobile/Tablet Layout
+    if (isMobile || isTablet) {
+        return (
+            <div className="min-h-screen bg-gray-50 p-4">
+                {/* Mobile Header */}
+                <div className="text-center mb-6">
+                    <h1 className="text-2xl font-bold text-gray-800 mb-2">
+                        Quản lý đơn hàng
+                    </h1>
+                    <p className="text-gray-600 text-sm">Theo dõi và quản lý tất cả đơn hàng của bạn</p>
+                </div>
+
+                {/* Search Bar */}
+                <div className="mb-6">
+                    <Input
+                        placeholder="Tìm kiếm đơn hàng..."
+                        prefix={<SearchOutlined className="text-gray-400" />}
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            // Reset pagination khi search
+                            setMobilePagination(prev => ({ ...prev, current: 1 }));
+                        }}
+                        className="rounded-lg shadow-sm"
+                        size="large"
+                    />
+                </div>
+
+                {/* Mobile Stats Cards */}
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                    <Card className="bg-gradient-to-r from-orange-50 to-amber-50 shadow-sm border-0 p-2" bodyStyle={{ padding: '8px' }}>
+                        <div className="text-center">
+                            <div className="p-1.5 bg-orange-100 rounded-lg mx-auto mb-1.5 w-10 h-10 flex items-center justify-center">
+                                <ShoppingCartOutlined className="text-lg text-orange-600" />
+                            </div>
+                            <p className="text-xs text-gray-600 mb-1">Tổng sản phẩm</p>
+                            <p className="text-base font-bold text-orange-600">{totalQuantity}</p>
+                        </div>
+                    </Card>
+
+                    <Card className="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm border-0 p-2" bodyStyle={{ padding: '8px' }}>
+                        <div className="text-center">
+                            <div className="p-1.5 bg-green-100 rounded-lg mx-auto mb-1.5 w-10 h-10 flex items-center justify-center">
+                                <DollarOutlined className="text-lg text-green-600" />
+                            </div>
+                            <p className="text-xs text-gray-600 mb-1">Tổng chi tiêu</p>
+                            <p className="text-base font-bold text-green-600">{totalSpent.toLocaleString()}₫</p>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Mobile Order Cards */}
+                {loading ? (
+                    <div className="flex items-center justify-center py-12">
+                        <div className="text-center">
+                            <Spin size="large" />
+                            <p className="mt-4 text-gray-600 text-sm">Đang tải đơn hàng...</p>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {userOrders
+                            .filter(order => 
+                                order.shipName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                order.id?.toString().includes(searchTerm) ||
+                                order.shipPhone?.includes(searchTerm)
+                            )
+                            .slice(
+                                (mobilePagination.current - 1) * mobilePagination.pageSize,
+                                mobilePagination.current * mobilePagination.pageSize
+                            )
+                            .map((order, index) => {
+                            const config = statusConfig[order.status] || statusConfig.pending;
+                            return (
+                                                                <Card 
+                                    key={order.id} 
+                                    className="shadow-md border-0 hover:shadow-lg transition-all duration-200 cursor-pointer"
+                                    onClick={() => handleShowDetail(order)}
+                                    bodyStyle={{ padding: '12px' }}
+                                >
+                                    <div className="space-y-2">
+                                        {/* Header Row */}
+                                        <div className="flex items-center justify-between">
+                                            <div className="text-xs text-gray-500">
+                                                #{order.id}, {new Date(order.orderDate).toLocaleDateString('vi-VN', { 
+                                                    month: 'short', 
+                                                    day: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                }).toUpperCase()}
+                                            </div>
+                                            <div className={`inline-flex items-center px-1.5 py-0.5 rounded-full ${config.bgColor} ${config.borderColor} border`}>
+                                                {config.icon}
+                                                <span className={`text-xs font-medium ${config.textColor} ml-1`}>
+                                                    {config.text}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Amount */}
+                                        <div className="text-xl font-bold text-gray-900">
+                                            {formatPrice(order.totalPrice)}
+                                        </div>
+
+                                        {/* Customer Name */}
+                                        <div className="text-sm font-medium text-gray-700">
+                                            {order.shipName}
+                                        </div>
+
+                                        {/* View Detail Button */}
+                                        <div className="flex justify-end">
+                                            <Button
+                                                type="primary"
+                                                size="small"
+                                                className="bg-blue-500 hover:bg-blue-600 border-0 shadow-sm hover:shadow-md transform hover:scale-105 transition-all duration-200 text-xs"
+                                            >
+                                                XEM CHI TIẾT
+                                                <ArrowRightOutlined className="ml-1 text-xs" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </Card>
+                             );
+                         })}
+                    </div>
+                )}
+
+                                {/* Mobile Pagination */}
+                {!loading && userOrders.length > 0 && (() => {
+                    const filteredOrders = userOrders.filter(order => 
+                        order.shipName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        order.id?.toString().includes(searchTerm) ||
+                        order.shipPhone?.includes(searchTerm)
+                    );
+                    const totalPages = Math.ceil(filteredOrders.length / mobilePagination.pageSize);
+                    const startIndex = (mobilePagination.current - 1) * mobilePagination.pageSize;
+                    const endIndex = Math.min(mobilePagination.current * mobilePagination.pageSize, filteredOrders.length);
+                    
+                    return (
+                        <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm text-gray-600">
+                                    {filteredOrders.length > 0 ? `${startIndex + 1}-${endIndex}` : '0-0'} của {filteredOrders.length} đơn hàng
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Button
+                                        size="small"
+                                        disabled={mobilePagination.current === 1}
+                                        onClick={() => setMobilePagination(prev => ({ ...prev, current: prev.current - 1 }))}
+                                        className="flex items-center justify-center w-8 h-8 border border-gray-300 bg-white hover:bg-gray-50"
+                                    >
+                                        <span className="text-gray-600 font-medium">&lt;</span>
+                                    </Button>
+                                    <div className="flex items-center space-x-1">
+                                        <Input
+                                            size="small"
+                                            value={pageInputValue}
+                                            onChange={(e) => {
+                                                setPageInputValue(e.target.value);
+                                            }}
+                                            onPressEnter={(e) => {
+                                                const value = parseInt(e.target.value);
+                                                if (value && value > 0 && value <= totalPages) {
+                                                    setMobilePagination(prev => ({ ...prev, current: value }));
+                                                } else {
+                                                    setPageInputValue(mobilePagination.current.toString());
+                                                }
+                                            }}
+                                            onBlur={() => {
+                                                setPageInputValue(mobilePagination.current.toString());
+                                            }}
+                                            className="w-12 h-8 text-center border border-gray-300 rounded"
+                                            style={{ padding: '4px 8px' }}
+                                        />
+                                        <span className="text-gray-600">/</span>
+                                        <span className="text-gray-700 font-medium">{totalPages}</span>
+                                    </div>
+                                    <Button
+                                        size="small"
+                                        disabled={mobilePagination.current >= totalPages}
+                                        onClick={() => setMobilePagination(prev => ({ ...prev, current: prev.current + 1 }))}
+                                        className="flex items-center justify-center w-8 h-8 border border-gray-300 bg-white hover:bg-gray-50"
+                                    >
+                                        <span className="text-gray-600 font-medium">&gt;</span>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })()}
+
+                {/* Empty State */}
+                {!loading && userOrders.length === 0 && (
+                    <div className="text-center py-12">
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <ShoppingCartOutlined className="text-2xl text-gray-400" />
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">Chưa có đơn hàng nào</h3>
+                        <p className="text-gray-600 text-sm">Bạn chưa có đơn hàng nào trong hệ thống.</p>
+                    </div>
+                )}
+
+                {/* Modal chi tiết đơn hàng */}
+                <Modal
+                    title={
+                        <div className="flex items-center">
+                            <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center mr-3">
+                                <ShoppingCartOutlined className="text-white text-sm" />
+                            </div>
+                            <div>
+                                <div className="text-base font-bold text-gray-800">Chi tiết đơn hàng #{selectedOrder?.id}</div>
+                                <div className="text-xs text-gray-600">Thông tin chi tiết về đơn hàng</div>
+                            </div>
+                        </div>
+                    }
+                    open={modalVisible}
+                    onCancel={handleCloseModal}
+                    footer={[
+                        <Button key="close" onClick={handleCloseModal} className="bg-gray-500 hover:bg-gray-600 border-gray-500 text-white">
+                            Đóng
+                        </Button>
+                    ]}
+                    width="95%"
+                    className="custom-modal"
+                >
+                    {selectedOrder && (
+                        <div className="space-y-4">
+                            {/* Status Badge */}
+                            <div className="text-center mb-4">
+                                {(() => {
+                                    const config = statusConfig[selectedOrder.status] || statusConfig.pending;
+                                    return (
+                                        <div className={`inline-flex items-center px-4 py-2 rounded-full ${config.bgColor} ${config.borderColor} border shadow-md`}>
+                                            {config.icon}
+                                            <span className={`font-semibold ${config.textColor} ml-2 text-base`}>
+                                                {config.text}
+                                            </span>
+                                        </div>
+                                    );
+                                })()}
+                            </div>
+
+                            {/* Order Details */}
+                            <div className="space-y-4">
+                                {/* Shipping Information */}
+                                <Card className="shadow-sm border-0 bg-gray-50">
+                                    <div className="space-y-3">
+                                        <div className="flex items-center p-2 bg-gray-50 rounded-lg">
+                                            <UserOutlined className="text-gray-400 mr-3 w-4" />
+                                            <div>
+                                                <p className="text-xs text-gray-500">Người nhận</p>
+                                                <p className="font-semibold text-gray-900 text-sm">{selectedOrder.shipName}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center p-2 bg-gray-50 rounded-lg">
+                                            <PhoneOutlined className="text-gray-400 mr-3 w-4" />
+                                            <div>
+                                                <p className="text-xs text-gray-500">Số điện thoại</p>
+                                                <p className="font-semibold text-gray-900 text-sm">{selectedOrder.shipPhone}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start p-2 bg-gray-50 rounded-lg">
+                                            <EnvironmentOutlined className="text-gray-400 mr-3 w-4 mt-1" />
+                                            <div>
+                                                <p className="text-xs text-gray-500">Địa chỉ</p>
+                                                <p className="font-semibold text-gray-900 text-sm">{selectedOrder.shipAddress}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card>
+
+                                {/* Order Information */}
+                                <Card className="shadow-sm border-0 bg-gray-50">
+                                    <div className="space-y-3">
+                                        <div className="flex items-center p-2 bg-gray-50 rounded-lg">
+                                            <CalendarOutlined className="text-gray-400 mr-3 w-4" />
+                                            <div>
+                                                <p className="text-xs text-gray-500">Ngày đặt</p>
+                                                <p className="font-semibold text-gray-900 text-sm">{new Date(selectedOrder.orderDate).toLocaleDateString('vi-VN')}</p>
+                                            </div>
+                                        </div>
+                                        {selectedOrder.shippedDate && (
+                                            <div className="flex items-center p-2 bg-gray-50 rounded-lg">
+                                                <CarOutlined className="text-gray-400 mr-3 w-4" />
+                                                <div>
+                                                    <p className="text-xs text-gray-500">Ngày giao</p>
+                                                    <p className="font-semibold text-gray-900 text-sm">{new Date(selectedOrder.shippedDate).toLocaleDateString('vi-VN')}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <div className="flex items-center p-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                                            <DollarOutlined className="text-green-600 mr-3 w-4" />
+                                            <div>
+                                                <p className="text-xs text-green-600 font-medium">Tổng tiền</p>
+                                                <p className="font-bold text-lg text-green-700">{selectedOrder.totalPrice?.toLocaleString()}₫</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </div>
+
+                            {/* Note Section */}
+                            {selectedOrder.note && (
+                                <Card className="shadow-sm border-0 bg-gray-50">
+                                    <div className="flex items-center mb-2">
+                                        <StarOutlined className="text-gray-600 mr-2 w-4" />
+                                        <span className="font-semibold text-gray-800 text-sm">Ghi chú</span>
+                                    </div>
+                                    <p className="text-gray-700 text-sm leading-relaxed">{selectedOrder.note}</p>
+                                </Card>
+                            )}
+                        </div>
+                    )}
+                </Modal>
+            </div>
+        );
+    }
+
+    // Desktop Layout (unchanged)
     return (
         <div className="rounded-2xl overflow-hidden bg-white">
             <div className="container mx-auto px-4 ">

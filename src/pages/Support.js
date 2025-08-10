@@ -213,34 +213,31 @@ const Support = () => {
     // Admin UI
     if (isAdmin) {
         return (
-            <div className="bg-gray-50 ">
+            <div className="bg-gray-50">
                 {/* Header */}
-                <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
-                                <UserOutlined className="text-white text-lg" />
+                <div className="bg-white shadow-sm border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                        <div className="flex items-center space-x-2 sm:space-x-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center">
+                                <UserOutlined className="text-white text-sm sm:text-lg" />
                             </div>
                             <div>
-                                <h1 className="text-xl font-semibold text-gray-800">
+                                <h1 className="text-lg sm:text-xl font-semibold text-gray-800">
                                     Admin Dashboard
                                 </h1>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-xs sm:text-sm text-gray-600">
                                     Quản lý hỗ trợ khách hàng
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center space-x-4">
-                            {/* Connection Status */}
-                          
-
+                        <div className="flex items-center space-x-2 sm:space-x-4">
                             {/* Admin Info */}
                             {user && (
-                                <div className="flex items-center space-x-2 px-3 py-2 bg-red-100 rounded-lg">
-                                    <span className="text-sm text-red-700 font-medium">
+                                <div className="flex items-center space-x-2 px-2 sm:px-3 py-1 sm:py-2 bg-red-100 rounded-lg">
+                                    <span className="text-xs sm:text-sm text-red-700 font-medium">
                                         {user.name || user.email || 'Admin'}
                                     </span>
-                                    <span className="px-2 py-1 text-xs rounded-full bg-red-200 text-red-700">
+                                    <span className="px-1 sm:px-2 py-1 text-xs rounded-full bg-red-200 text-red-700">
                                         Admin
                                     </span>
                                 </div>
@@ -250,21 +247,18 @@ const Support = () => {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex h-full">
+                <div className="flex flex-col lg:flex-row h-full">
                     {/* Sidebar */}
-                    <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-                        {/* Sidebar Header */}
-
-
+                    <div className="w-full lg:w-80 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 flex flex-col order-2 lg:order-1">
                         {/* Users List */}
-                        <div className="flex-1 overflow-y-auto">
+                        <div className="flex-1 overflow-y-auto max-h-64 lg:max-h-none">
                             {connectedUsers.length > 0 ? (
                                 connectedUsers
-                                    .filter(user => user.role !== 'admin') // Loại bỏ admin khỏi danh sách
+                                    .filter(user => user.role !== 'admin')
                                     .map((user, index) => (
                                     <div 
                                         key={index} 
-                                        className={`flex items-center space-x-3 p-3 hover:bg-gray-50 cursor-pointer transition-colors ${
+                                        className={`flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 hover:bg-gray-50 cursor-pointer transition-colors ${
                                             selectedUser && selectedUser.userId === user.userId ? 'bg-blue-50 border-r-2 border-blue-500' : ''
                                         }`}
                                         onClick={() => {
@@ -273,75 +267,75 @@ const Support = () => {
                                         }}
                                     >
                                         <div className="relative">
-                                            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                                                <UserOutlined className="text-gray-600" />
+                                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                                                <UserOutlined className="text-gray-600 text-sm sm:text-base" />
                                             </div>
-                                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                                            <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white"></div>
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="font-medium text-gray-800 truncate">
+                                            <h3 className="font-medium text-gray-800 truncate text-sm sm:text-base">
                                                 {user.name}
                                             </h3>
-                                            <p className="text-sm text-gray-500 truncate">
+                                            <p className="text-xs sm:text-sm text-gray-500 truncate">
                                                 {getLatestMessage(user.userId)}
                                             </p>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="text-center py-8 text-gray-500">
-                                    <TeamOutlined className="text-4xl mb-2" />
-                                    <p>Chưa có người dùng nhắn tin</p>
+                                <div className="text-center py-6 sm:py-8 text-gray-500">
+                                    <TeamOutlined className="text-3xl sm:text-4xl mb-2" />
+                                    <p className="text-sm sm:text-base">Chưa có người dùng nhắn tin</p>
                                 </div>
                             )}
                         </div>
                     </div>
 
                     {/* Main Chat Area */}
-                    <div className="flex-1 flex flex-col">
+                    <div className="flex-1 flex flex-col order-1 lg:order-2">
                         {/* Chat Header */}
-                        <div className="bg-white border-b border-gray-200 px-6 py-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                                        <UserOutlined className="text-gray-600" />
+                        <div className="bg-white border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                                <div className="flex items-center space-x-2 sm:space-x-3">
+                                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                                        <UserOutlined className="text-gray-600 text-sm sm:text-base" />
                                     </div>
                                     <div>
-                                        <h2 className="font-semibold text-gray-800">
+                                        <h2 className="font-semibold text-gray-800 text-base sm:text-lg">
                                             {selectedUser ? selectedUser.name : 'Chọn người dùng để hỗ trợ'}
                                         </h2>
-                                        <p className="text-sm text-gray-500">
+                                        <p className="text-xs sm:text-sm text-gray-500">
                                             {selectedUser ? selectedUser.email : 'Chọn một người dùng từ danh sách bên trái'}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex items-center space-x-2">
-                                    <button className="p-2 hover:bg-gray-100 rounded-full">
-                                        <PhoneOutlined className="text-gray-600" />
+                                <div className="flex items-center space-x-1 sm:space-x-2">
+                                    <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full">
+                                        <PhoneOutlined className="text-gray-600 text-sm sm:text-base" />
                                     </button>
-                                    <button className="p-2 hover:bg-gray-100 rounded-full">
-                                        <VideoCameraOutlined className="text-gray-600" />
+                                    <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full">
+                                        <VideoCameraOutlined className="text-gray-600 text-sm sm:text-base" />
                                     </button>
-                                    <button className="p-2 hover:bg-gray-100 rounded-full">
-                                        <InfoCircleOutlined className="text-gray-600" />
+                                    <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full">
+                                        <InfoCircleOutlined className="text-gray-600 text-sm sm:text-base" />
                                     </button>
                                 </div>
                             </div>
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto p-6">
+                        <div className="flex-1 overflow-y-auto p-3 sm:p-6">
                             {selectedUser ? (
-                                <div className="space-y-4">
+                                <div className="space-y-3 sm:space-y-4">
                                     {selectedUserMessages.length > 0 ? (
                                         selectedUserMessages.map((msg, index) => (
                                             <div key={index} className={`flex ${msg.role === 'admin' ? 'justify-end' : 'justify-start'}`}>
-                                                <div className={`rounded-lg px-4 py-2 max-w-xs lg:max-w-md xl:max-w-lg break-words ${
+                                                <div className={`rounded-lg px-3 sm:px-4 py-2 max-w-[280px] sm:max-w-xs lg:max-w-md xl:max-w-lg break-words ${
                                                     msg.role === 'admin' 
                                                         ? 'bg-blue-600 text-white' 
                                                         : 'bg-gray-100 text-gray-800'
                                                 }`}>
-                                                    <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                                                    <p className="text-xs sm:text-sm whitespace-pre-wrap">{msg.message}</p>
                                                     <p className={`text-xs mt-1 ${
                                                         msg.role === 'admin' 
                                                             ? 'text-blue-200' 
@@ -353,21 +347,21 @@ const Support = () => {
                                             </div>
                                         ))
                                     ) : (
-                                        <div className="text-center py-8 text-gray-500">
-                                            <MessageOutlined className="text-4xl mb-2" />
-                                            <p>Chưa có tin nhắn từ {selectedUser.name}</p>
+                                        <div className="text-center py-6 sm:py-8 text-gray-500">
+                                            <MessageOutlined className="text-4xl sm:text-6xl mb-2" />
+                                            <p className="text-sm sm:text-base">Chưa có tin nhắn từ {selectedUser.name}</p>
                                         </div>
                                     )}
                                     
                                     {/* Typing Indicator for Admin */}
                                     {typingUsers.has(selectedUser?.userId) && (
                                         <div className="flex justify-start">
-                                            <div className="bg-gray-100 text-gray-800 rounded-lg px-4 py-2">
+                                            <div className="bg-gray-100 text-gray-800 rounded-lg px-3 sm:px-4 py-2">
                                                 <div className="flex items-center space-x-1">
                                                     <div className="flex space-x-1">
-                                                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                                                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                                                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                                                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                                                     </div>
                                                     <span className="text-xs text-gray-500 ml-2">
                                                         {selectedUser?.name} đang soạn tin nhắn...
@@ -378,12 +372,12 @@ const Support = () => {
                                     )}
                                 </div>
                             ) : (
-                                <div className="text-center py-12">
-                                    <MessageOutlined className="text-6xl text-gray-300 mb-4" />
-                                    <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                                <div className="text-center py-8 sm:py-12">
+                                    <MessageOutlined className="text-4xl sm:text-6xl text-gray-300 mb-3 sm:mb-4" />
+                                    <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">
                                         Chọn cuộc trò chuyện để bắt đầu
                                     </h3>
-                                    <p className="text-gray-500">
+                                    <p className="text-gray-500 text-sm sm:text-base">
                                         Chọn một người dùng từ danh sách bên trái để hỗ trợ
                                     </p>
                                 </div>
@@ -391,22 +385,22 @@ const Support = () => {
                         </div>
 
                         {/* Message Input */}
-                        <div className="bg-white border-t border-gray-200 p-4">
-                            <form onSubmit={handleAdminSendMessage} className="flex items-center space-x-4">
+                        <div className="bg-white border-t border-gray-200 p-3 sm:p-4">
+                            <form onSubmit={handleAdminSendMessage} className="flex items-center space-x-2 sm:space-x-4">
                                 <input
                                     type="text"
                                     placeholder={selectedUser ? (isConnected ? "Nhập tin nhắn..." : "Đang kết nối...") : "Vui lòng chọn người dùng để nhắn tin"}
                                     value={message}
                                     onChange={handleTyping}
-                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+                                    className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
                                     disabled={!isConnected || !selectedUser}
                                 />
                                 <button
                                     type="submit"
                                     disabled={!message.trim() || !isConnected || !selectedUser}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    <SendOutlined />
+                                    <SendOutlined className="text-sm sm:text-base" />
                                 </button>
                             </form>
                         </div>
@@ -419,46 +413,46 @@ const Support = () => {
     // Regular User UI
     return (
         <div className="bg-white">
-            <div className=" mx-auto flex flex-col">
+            <div className="mx-auto flex flex-col">
                 {/* Header */}
-                <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                                <UserOutlined className="text-white text-lg" />
+                <div className="bg-white shadow-sm border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                        <div className="flex items-center space-x-2 sm:space-x-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                                <UserOutlined className="text-white text-sm sm:text-lg" />
                             </div>
                             <div>
-                                <h1 className="text-xl font-semibold text-gray-800">
+                                <h1 className="text-lg sm:text-xl font-semibold text-gray-800">
                                     💬 Chat Support
                                 </h1>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-xs sm:text-sm text-gray-600">
                                     Xin chào! Chúng tôi sẽ hỗ trợ bạn ngay
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2 sm:space-x-4">
                             {/* Connection Status */}
-                            <div className={`flex items-center space-x-2 px-3 py-2 rounded-lg ${isConnected
+                            <div className={`flex items-center space-x-2 px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm ${isConnected
                                 ? 'bg-green-100 text-green-700 border border-green-200'
                                 : 'bg-red-100 text-red-700 border border-red-200'
                                 }`}>
                                 {isConnected ? (
-                                    <CheckCircleOutlined className="text-green-600" />
+                                    <CheckCircleOutlined className="text-green-600 text-sm sm:text-base" />
                                 ) : (
-                                    <CloseCircleOutlined className="text-red-600" />
+                                    <CloseCircleOutlined className="text-red-600 text-sm sm:text-base" />
                                 )}
-                                <span className="text-sm font-medium">
+                                <span className="font-medium">
                                     {isConnected ? 'Đã kết nối' : 'Đang kết nối...'}
                                 </span>
                             </div>
 
                             {/* User Info */}
                             {user && (
-                                <div className="flex items-center space-x-2 px-3 py-2 bg-gray-100 rounded-lg">
-                                    <span className="text-sm text-gray-600">
+                                <div className="flex items-center space-x-2 px-2 sm:px-3 py-1 sm:py-2 bg-gray-100 rounded-lg">
+                                    <span className="text-xs sm:text-sm text-gray-600">
                                         {user.name || user.email || 'User'}
                                     </span>
-                                    <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
+                                    <span className="px-1 sm:px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
                                         User
                                     </span>
                                 </div>
@@ -468,17 +462,17 @@ const Support = () => {
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+                <div className="flex-1 overflow-y-auto p-3 sm:p-6 bg-gray-50">
                     {messages.length > 0 ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3 sm:space-y-4">
                             {messages.map((msg, index) => (
                                 <div key={index} className={`flex ${msg.role === 'admin' ? 'justify-start' : 'justify-end'}`}>
-                                    <div className={`rounded-lg px-4 py-2 max-w-xs lg:max-w-md xl:max-w-lg break-words ${
+                                    <div className={`rounded-lg px-3 sm:px-4 py-2 max-w-[280px] sm:max-w-xs lg:max-w-md xl:max-w-lg break-words ${
                                         msg.role === 'admin' 
                                             ? 'bg-white text-gray-800 shadow-sm border border-gray-200' 
                                             : 'bg-blue-600 text-white'
                                     }`}>
-                                        <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                                        <p className="text-xs sm:text-sm whitespace-pre-wrap">{msg.message}</p>
                                         <p className={`text-xs mt-1 ${
                                             msg.role === 'admin' 
                                                 ? 'text-gray-500' 
@@ -504,12 +498,12 @@ const Support = () => {
                                 
                                 return adminTyping ? (
                                     <div className="flex justify-start">
-                                        <div className="bg-white text-gray-800 rounded-lg px-4 py-2 shadow-sm border border-gray-200">
+                                        <div className="bg-white text-gray-800 rounded-lg px-3 sm:px-4 py-2 shadow-sm border border-gray-200">
                                             <div className="flex items-center space-x-1">
                                                 <div className="flex space-x-1">
-                                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                                                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                                                 </div>
                                                 <span className="text-xs text-gray-500 ml-2">
                                                     Admin đang soạn tin nhắn...
@@ -521,24 +515,24 @@ const Support = () => {
                             })()}
                         </div>
                     ) : (
-                        <div className="text-center py-12">
-                            <MessageOutlined className="text-6xl text-gray-300 mb-4" />
-                            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                        <div className="text-center py-8 sm:py-12">
+                            <MessageOutlined className="text-4xl sm:text-6xl text-gray-300 mb-3 sm:mb-4" />
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">
                                 Chào mừng đến với Support Chat
                             </h3>
-                            <p className="text-gray-500 mb-6">
+                            <p className="text-gray-500 mb-4 sm:mb-6 text-sm sm:text-base">
                                 Chúng tôi sẽ kết nối bạn với nhân viên hỗ trợ ngay
                             </p>
-                            <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-lg ${isConnected
+                            <div className={`inline-flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm ${isConnected
                                 ? 'bg-green-100 text-green-700'
                                 : 'bg-yellow-100 text-yellow-700'
                                 }`}>
                                 {isConnected ? (
-                                    <CheckCircleOutlined className="text-green-600" />
+                                    <CheckCircleOutlined className="text-green-600 text-sm sm:text-base" />
                                 ) : (
-                                    <CloseCircleOutlined className="text-yellow-600" />
+                                    <CloseCircleOutlined className="text-yellow-600 text-sm sm:text-base" />
                                 )}
-                                <span className="text-sm font-medium">
+                                <span className="font-medium">
                                     {isConnected ? 'Đã sẵn sàng nhận hỗ trợ' : 'Đang kết nối với server...'}
                                 </span>
                             </div>
@@ -547,23 +541,23 @@ const Support = () => {
                 </div>
 
                 {/* Message Input */}
-                <div className="bg-white border-t border-gray-200 p-4">
-                    <form onSubmit={handleSendMessage} className="flex space-x-4">
+                <div className="bg-white border-t border-gray-200 p-3 sm:p-4">
+                    <form onSubmit={handleSendMessage} className="flex space-x-2 sm:space-x-4">
                         <input
                             type="text"
                             placeholder={isConnected ? "Nhập tin nhắn..." : "Đang kết nối..."}
                             value={message}
                             onChange={handleTyping}
-                            className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+                            className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
                             disabled={!isConnected}
                         />
                         <button
                             type="submit"
                             disabled={!message.trim() || !isConnected}
-                            className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                            className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1 sm:space-x-2"
                         >
-                            <SendOutlined />
-                            <span>Gửi</span>
+                            <SendOutlined className="text-sm sm:text-base" />
+                            <span className="text-sm sm:text-base">Gửi</span>
                         </button>
                     </form>
                 </div>

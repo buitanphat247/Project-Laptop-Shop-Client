@@ -9,6 +9,8 @@ import ZaloButton from "./components/contact/ZaloButton";
 import RequireAuth from "./guard/RequireAuth";
 import RequireAdminAuth from "./guard/RequireAdminAuth";
 import RedirectIfAuthenticated from "./guard/RedirectIfAuthenticated";
+import DesktopOnlyRoute from "./components/admin/DesktopOnlyRoute";
+import MobileAdminRedirect from "./components/admin/MobileAdminRedirect";
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import LoadingProgressBar from "./components/progress/LoadingProgressBar";
@@ -38,12 +40,13 @@ import News from './pages/News';
 import Checkout from './pages/Checkout';
 import Order from './pages/Order';
 import NotFound from './pages/NotFound';
-import Feedback from './pages/Feedback';
+import Feedback from './trash/Feedback';
 import RolePermission from './pages/admin/RolePermission';
 import Notification from './pages/Notification';
 import Support from './pages/Support';
 import PermissionManager from './pages/admin/PermissionManager';
 import FavoriteProduct from './pages/FavoriteProduct';
+import HelpSupport from "./pages/HelpSupport";
 
 function App() {
 
@@ -71,13 +74,14 @@ function App() {
                 <Route path="/news" element={<News />} />
                 <Route path="/product/:id" element={<Detail />} />
                 <Route path="/favorite-products" element={<FavoriteProduct />} />
-                <Route path="/feedback" element={<Feedback />} />
+                {/* <Route path="/feedback" element={<Feedback />} /> */}
                 <Route path="/support" element={<Support />} />
                 <Route path="/cart" element={<RequireAuth><Cart /></RequireAuth>} />
                 <Route path="/setting" element={<RequireAuth><Setting /></RequireAuth>} />
                 <Route path="/vnpay-return" element={<Checkout />} />
                 <Route path="/orders" element={<Order />} />
                 <Route path="/docs" element={<Document />} />
+                <Route path="/help&support" element={<HelpSupport />} />
               </Route>
               {/* Auth Routes - Không cần splash */}
               <Route path="/signin" element={<RedirectIfAuthenticated><SignIn /></RedirectIfAuthenticated>} />
@@ -85,8 +89,14 @@ function App() {
               <Route path="/reset-password" element={<RedirectIfAuthenticated><ResetPassword /></RedirectIfAuthenticated>} />
               {/* Redirect /auth to /signin */}
               <Route path="/auth" element={<Navigate to="/signin" replace />} />
-              {/* Admin Routes */}
-              <Route path="/admin" element={<RequireAdminAuth><AdminLayout /></RequireAdminAuth>}>
+              {/* Admin Routes - Chỉ hiển thị trên Desktop */}
+              <Route path="/admin" element={
+                <RequireAdminAuth>
+                  <MobileAdminRedirect>
+                    <AdminLayout />
+                  </MobileAdminRedirect>
+                </RequireAdminAuth>
+              }>
                 <Route index element={<Dashboard />} />
                 <Route path="products" element={<ProductManager />} />
                 <Route path="categories" element={<CategoryManager />} />
