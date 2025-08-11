@@ -76,8 +76,10 @@ const About = () => {
 
     return (
         <div className='space-y-5'>
-            {/* Tiêu đề */}
-            <h1 className="text-4xl font-bold text-blue-600">Về chúng tôi</h1>
+            {/* Section Về chúng tôi với nền trắng */}
+            <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
+                {/* Tiêu đề */}
+                <h1 className="text-4xl font-bold text-blue-600 mb-6">Về chúng tôi</h1>
 
             {/* Ảnh đại diện + mô tả */}
             <div className="flex flex-col lg:flex-row items-center gap-8">
@@ -155,6 +157,7 @@ const About = () => {
                     ></iframe>
                 </div>
             </div>
+        </div>
         </div>
     );
 };

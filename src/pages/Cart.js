@@ -120,10 +120,12 @@ const Cart = () => {
     const total = subtotal - discount + shippingFee;
     if (pageLoading) {
         return (
-            <div className="flex justify-center items-center min-h-[70vh]">
-                <Spin size="large" tip="Đang tải sản phẩm..." />
+            <div className="flex justify-center items-center min-h-[70vh] px-4">
+                <div className="text-center">
+                    <Spin size="large" tip="Đang tải sản phẩm..." />
+                    <p className="mt-4 text-gray-600 text-sm sm:text-base">Vui lòng chờ trong giây lát...</p>
+                </div>
             </div>
-
         );
     }
 
@@ -132,33 +134,75 @@ const Cart = () => {
     };
 
     return (
-        <div className="w-full flex flex-col lg:flex-row gap-8 justify-center items-start">
-            <CartTable
-                cartItems={cartItems}
-                updateQuantity={updateQuantity}
-                removeItem={handleRemoveItemWithConfirm}
-                loading={loading}
-            />
-            <OrderSummary
-                subtotal={subtotal}
-                discount={discount}
-                shippingFee={shippingFee}
-                total={total}
-                promoCode={promoCode}
-                setPromoCode={setPromoCode}
-                onCheckout={async () => {
-                    try {
-                        const userId = getUserProfile()?.id;
-                        if (!userId) {
-                            message.error("Bạn cần đăng nhập để thanh toán!");
-                            return;
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+            {/* Mobile & Tablet Layout */}
+            <div className="block lg:hidden">
+                <div className="space-y-6">
+                    {/* Order Summary cho mobile/tablet - hiển thị trước */}
+                    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                        <OrderSummary
+                            subtotal={subtotal}
+                            discount={discount}
+                            shippingFee={shippingFee}
+                            total={total}
+                            promoCode={promoCode}
+                            setPromoCode={setPromoCode}
+                            onCheckout={async () => {
+                                try {
+                                    const userId = getUserProfile()?.id;
+                                    if (!userId) {
+                                        message.error("Bạn cần đăng nhập để thanh toán!");
+                                        return;
+                                    }
+                                    handleOpenModal();
+                                } catch (error) {
+                                    message.error("Có lỗi xảy ra!");
+                                }
+                            }}
+                        />
+                    </div>
+                    
+                    {/* Cart Table cho mobile/tablet */}
+                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                        <CartTable
+                            cartItems={cartItems}
+                            updateQuantity={updateQuantity}
+                            removeItem={handleRemoveItemWithConfirm}
+                            loading={loading}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* Desktop Layout - giữ nguyên */}
+            <div className="hidden lg:flex flex-row gap-8 justify-center items-start">
+                <CartTable
+                    cartItems={cartItems}
+                    updateQuantity={updateQuantity}
+                    removeItem={handleRemoveItemWithConfirm}
+                    loading={loading}
+                />
+                <OrderSummary
+                    subtotal={subtotal}
+                    discount={discount}
+                    shippingFee={shippingFee}
+                    total={total}
+                    promoCode={promoCode}
+                    setPromoCode={setPromoCode}
+                    onCheckout={async () => {
+                        try {
+                            const userId = getUserProfile()?.id;
+                            if (!userId) {
+                                message.error("Bạn cần đăng nhập để thanh toán!");
+                                return;
+                            }
+                            handleOpenModal();
+                        } catch (error) {
+                            message.error("Có lỗi xảy ra!");
                         }
-                        handleOpenModal();
-                    } catch (error) {
-                        message.error("Có lỗi xảy ra!");
-                    }
-                }}
-            />
+                    }}
+                />
+            </div>
             <Modal
                 title="Thông tin người nhận"
                 open={showReceiverForm}
@@ -172,6 +216,9 @@ const Cart = () => {
                     </Button>
                 ]}
                 onOk={form.submit}
+                width="90%"
+                style={{ maxWidth: '500px' }}
+                centered
             >
                 <Form
                     id="receiverForm"
