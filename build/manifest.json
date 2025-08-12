@@ -1,25 +1,29 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Laptop Shop",
+  "name": "Laptop Shop - Cửa hàng laptop uy tín, giá tốt nhất Việt Nam",
+  "description": "Chuyên cung cấp laptop gaming, laptop văn phòng, laptop đồ họa chính hãng với giá tốt nhất",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "https://png.pngtree.com/png-clipart/20200727/original/pngtree-circle-technology-logo-design-png-image_5317177.jpg",
+      "sizes": "800x800",
+      "type": "image/jpeg"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
+      "src": "https://png.pngtree.com/png-clipart/20200727/original/pngtree-circle-technology-logo-design-png-image_5317177.jpg",
+      "type": "image/jpeg",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
-      "type": "image/png",
+      "src": "https://png.pngtree.com/png-clipart/20200727/original/pngtree-circle-technology-logo-design-png-image_5317177.jpg",
+      "type": "image/jpeg",
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "categories": ["shopping", "business", "productivity"],
+  "lang": "vi-VN"
 }
