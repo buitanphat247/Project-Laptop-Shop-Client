@@ -19,7 +19,7 @@ import { getCookie, setCookie, decodeBase64, getUserIdFromCookie } from '../util
  * @property {Object} headers - Headers mặc định cho mọi request
  * @property {boolean} withCredentials - Cho phép gửi cookies trong cross-origin requests
  */
-const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3030/api/v1';
+const apiBaseUrl = 'https://project-laptop-shop-sever.vercel.app/api/v1';
 
 const axiosClient = axios.create({
     baseURL: apiBaseUrl, // URL của backend API
@@ -41,12 +41,12 @@ axiosClient.interceptors.request.use(
     (config) => {
         // Lấy access token từ cookie
         const token = getCookie('accessToken');
-        
+
         // Nếu có token, thêm vào Authorization header
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
-        
+
         return config; // Trả về config đã được cập nhật
     },
     (error) => Promise.reject(error) // Xử lý lỗi nếu có
@@ -130,7 +130,7 @@ axiosClient.interceptors.response.use(
                 // Đây là cách tiếp cận khác với refresh token truyền thống
                 const userId = getUserIdFromCookie();
                 console.log('userId: ', userId);
-                
+
                 // Kiểm tra xem có userId không
                 if (!userId) throw new Error('No userId found in profile');
 
@@ -162,7 +162,7 @@ axiosClient.interceptors.response.use(
             } catch (err) {
                 // Xử lý lỗi khi refresh token thất bại
                 console.error('Token refresh failed with userId:', err);
-                
+
                 // Reject tất cả request trong queue
                 processQueue(err, null);
 
