@@ -15,5 +15,9 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "env": {
+    "REACT_APP_API_BASE_URL": "https://project-laptop-shop-sever.vercel.app/api/v1",
+    "REACT_APP_ENV": "production"
+  }
 }

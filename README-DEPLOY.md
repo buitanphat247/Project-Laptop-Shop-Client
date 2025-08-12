@@ -38,7 +38,7 @@ git push origin main
    - **Output Directory**: `build`
    - **Install Command**: `echo "No installation needed"` (hoặc để trống)
 5. **Environment Variables** (nếu cần):
-   - `REACT_APP_API_URL`: URL API backend
+   - `REACT_APP_API_BASE_URL`: `https://project-laptop-shop-sever.vercel.app/api/v1`
    - `REACT_APP_ENV`: `production`
 6. **Deploy**: Click "Deploy"
 
@@ -136,6 +136,30 @@ git push origin main
 
 - Kiểm tra tên biến môi trường trong Vercel Dashboard
 - Đảm bảo format: `REACT_APP_*`
+
+### Lỗi API Calls tới localhost
+
+**Nguyên nhân:** Ứng dụng vẫn gửi request tới `localhost:3030` sau khi deploy
+
+**Cách khắc phục:**
+1. **Set Environment Variables trong Vercel Dashboard:**
+   - `REACT_APP_API_BASE_URL`: `https://your-backend-domain.com/api/v1`
+   - `REACT_APP_ENV`: `production`
+
+2. **Hoặc cập nhật `vercel.json`:**
+   ```json
+   "env": {
+     "REACT_APP_API_BASE_URL": "https://your-backend-domain.com/api/v1"
+   }
+   ```
+
+3. **Rebuild và redeploy:**
+   ```bash
+   npm run build
+   git add .
+   git commit -m "Update API configuration"
+   git push origin main
+   ```
 
 ## 📱 Kiểm tra sau khi deploy
 
