@@ -4,19 +4,23 @@
 
 1. **Tài khoản Vercel**: Đăng ký tại [vercel.com](https://vercel.com)
 2. **Dự án đã build thành công**: Chạy `npm run build` để kiểm tra
-3. **Git repository**: Dự án phải được push lên GitHub/GitLab/Bitbucket
+3. **Thư mục build/**: Đảm bảo thư mục `build/` đã tồn tại và chứa files đã build
+4. **Git repository**: Dự án phải được push lên GitHub/GitLab/Bitbucket
 
 ## 🛠️ Các bước deploy
 
 ### Bước 1: Chuẩn bị dự án
 
 ```bash
-# Kiểm tra dự án build thành công
+# Kiểm tra dự án build thành công (nếu chưa build)
 npm run build
 
-# Commit và push code lên Git
+# Đảm bảo thư mục build/ tồn tại
+ls -la build/
+
+# Commit và push code lên Git (bao gồm cả thư mục build/)
 git add .
-git commit -m "Prepare for Vercel deployment"
+git commit -m "Prepare for Vercel deployment with pre-built files"
 git push origin main
 ```
 
@@ -28,11 +32,11 @@ git push origin main
 2. **Import Project**: Click "New Project"
 3. **Chọn Repository**: Chọn repository từ GitHub/GitLab/Bitbucket
 4. **Cấu hình Project**:
-   - **Framework Preset**: `Create React App`
+   - **Framework Preset**: `Other` (vì đã build sẵn)
    - **Root Directory**: `./` (để trống)
-   - **Build Command**: `npm run build`
+   - **Build Command**: `echo "Using pre-built files"` (hoặc để trống)
    - **Output Directory**: `build`
-   - **Install Command**: `npm install`
+   - **Install Command**: `echo "No installation needed"` (hoặc để trống)
 5. **Environment Variables** (nếu cần):
    - `REACT_APP_API_URL`: URL API backend
    - `REACT_APP_ENV`: `production`
@@ -62,18 +66,15 @@ vercel --prod
 
 ## ⚙️ Cấu hình trong vercel.json
 
-File `vercel.json` đã được tạo với cấu hình tối ưu:
+File `vercel.json` đã được cập nhật để sử dụng build có sẵn:
 
 ```json
 {
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
+      "src": "build/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -88,6 +89,8 @@ File `vercel.json` đã được tạo với cấu hình tối ưu:
   ]
 }
 ```
+
+**Lưu ý**: Cấu hình này sẽ deploy trực tiếp từ thư mục `build/` mà không cần build lại.
 
 ## 🔧 Troubleshooting
 

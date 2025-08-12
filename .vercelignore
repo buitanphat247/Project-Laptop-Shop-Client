@@ -4,8 +4,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Production build
-build/
+# Production build - Không loại trừ vì cần deploy build có sẵn
+# build/
 dist/
 
 # Environment files
