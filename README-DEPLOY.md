@@ -104,6 +104,29 @@ npm run build
 # Kiểm tra Node.js version (khuyến nghị 18+)
 ```
 
+### Lỗi 404 NOT_FOUND
+
+**Nguyên nhân thường gặp:**
+1. **Thư mục build/ không tồn tại**: Kiểm tra `ls -la build/`
+2. **Files không được commit**: Đảm bảo `git add build/` và `git commit`
+3. **Cấu hình vercel.json sai**: Sử dụng cấu hình đơn giản
+
+**Cách khắc phục:**
+```bash
+# 1. Kiểm tra build
+npm run build
+
+# 2. Kiểm tra thư mục build
+ls -la build/
+
+# 3. Commit build files
+git add build/
+git commit -m "Add build files"
+git push origin main
+
+# 4. Redeploy trên Vercel
+```
+
 ### Lỗi Routing (404)
 
 - Đảm bảo route cuối cùng trong `vercel.json` trỏ về `index.html`
