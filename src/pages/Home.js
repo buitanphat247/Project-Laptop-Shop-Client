@@ -34,58 +34,26 @@ const banners = [
     { imageUrl: "https://www.agres.id/artikel/wp-content/uploads/2021/11/57-banner-article-lenovo-ideapad-slim-3-14.png" },
 ];
 
-function CountdownTimer({ targetDate, bigText }) {
-    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const now = new Date();
-            const diff = Math.max(0, targetDate - now);
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-            setTimeLeft({ days, hours, minutes, seconds });
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [targetDate]);
-
-    return (
-        <div className={`flex justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-8 ${bigText ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold' : 'text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold'} text-gray-800`}>
-            <div className="flex flex-col items-center">
-                <span className="bg-white rounded-lg px-2 py-1 shadow-sm">{String(timeLeft.days).padStart(2, '0')}</span>
-                <span className="text-xs sm:text-sm md:text-base font-normal mt-1">Days</span>
-            </div>
-            <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl">:</span>
-            <div className="flex flex-col items-center">
-                <span className="bg-white rounded-lg px-2 py-1 shadow-sm">{String(timeLeft.hours).padStart(2, '0')}</span>
-                <span className="text-xs sm:text-sm md:text-base font-normal mt-1">Hours</span>
-            </div>
-            <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl">:</span>
-            <div className="flex flex-col items-center">
-                <span className="bg-white rounded-lg px-2 py-1 shadow-sm">{String(timeLeft.minutes).padStart(2, '0')}</span>
-                <span className="text-xs sm:text-sm md:text-base font-normal mt-1">Minutes</span>
-            </div>
-            <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl">:</span>
-            <div className="flex flex-col items-center">
-                <span className="bg-white rounded-lg px-2 py-1 shadow-sm">{String(timeLeft.seconds).padStart(2, '0')}</span>
-                <span className="text-xs sm:text-sm md:text-base font-normal mt-1">Seconds</span>
-            </div>
-        </div>
-    );
-}
-
 const Home = () => {
-    const [loading, setLoading] = useState(true);
-    const [categories, setCategories] = useState([]);
-    const [allProductsByCategory, setAllProductsByCategory] = useState({});
-    const [news, setNews] = useState([]);
+    // Gộp tất cả state vào một object để giảm rerender
+    const [state, setState] = useState({
+        loading: true,
+        categories: [],
+        allProductsByCategory: {},
+        news: []
+    });
+
+    const { loading, categories, allProductsByCategory, news } = state;
+
+    const updateState = (updates) => {
+        setState(prev => ({ ...prev, ...updates }));
+    };
 
     const fetchCategories = async () => {
         try {
             const res = await axiosClient.get('/category');
             const cats = res.data?.data || [];
-            setCategories(cats);
+            updateState({ categories: cats });
             return cats;
         } catch {
             message.error("Lỗi tải danh mục");
@@ -107,7 +75,7 @@ const Home = () => {
             );
             const all = await Promise.all(fetchTasks);
             const merged = Object.assign({}, ...all);
-            setAllProductsByCategory(merged);
+            updateState({ allProductsByCategory: merged });
         } catch {
             message.error("Lỗi tải sản phẩm");
         }
@@ -118,7 +86,7 @@ const Home = () => {
             const res = await axiosClient.get('/news', {
                 params: { page: 1, limit: 20 }
             });
-            setNews(res.data?.data || []);
+            updateState({ news: res.data?.data || [] });
         } catch {
             message.error("Lỗi tải tin tức");
         }
@@ -126,13 +94,13 @@ const Home = () => {
 
     useEffect(() => {
         const loadData = async () => {
-            setLoading(true);
+            updateState({ loading: true });
             const categories = await fetchCategories();
             await Promise.all([
                 fetchProductsByCategories(categories),
                 fetchNews()
             ]);
-            setLoading(false);
+            updateState({ loading: false });
         };
         loadData();
     }, []);

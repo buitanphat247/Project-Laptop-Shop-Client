@@ -13,7 +13,7 @@ const SignIn = () => {
     const { signin } = useAuth();
     const [form] = Form.useForm();
     const { isMobile, isTablet, isDesktop } = useDeviceDetection();
-    
+
     // Animated values for charts
     const [salesRevenue, setSalesRevenue] = useState(0);
     const [customers, setCustomers] = useState(0);
@@ -21,12 +21,6 @@ const SignIn = () => {
     const [conversion, setConversion] = useState(0);
 
     // Set default values
-    React.useEffect(() => {
-        form.setFieldsValue({
-            email: "admin@gmail.com",
-            password: "admin2747"
-        });
-    }, [form]);
 
     // Animate chart values
     useEffect(() => {
@@ -158,7 +152,7 @@ const SignIn = () => {
                         <div className="space-y-3 mb-4 sm:mb-6">
                             <p className="text-gray-600 text-xs sm:text-sm text-center font-medium">Đăng nhập nhanh:</p>
                             <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                                <Button
+                                {/* <Button
                                     type="button"
                                     onClick={() => quickLogin('admin')}
                                     disabled={loading}
@@ -167,7 +161,7 @@ const SignIn = () => {
                                 >
                                     <i className="fas fa-user-shield mr-1 sm:mr-2"></i>
                                     Admin
-                                </Button>
+                                </Button> */}
                                 <Button
                                     type="button"
                                     onClick={() => quickLogin('user')}
@@ -257,15 +251,15 @@ const SignIn = () => {
 
                         {/* Social Login */}
                         <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4">
-                            <Button 
-                                size={isMobile ? "small" : "middle"} 
+                            <Button
+                                size={isMobile ? "small" : "middle"}
                                 className="flex items-center justify-center border border-gray-300 hover:bg-gray-50 text-xs sm:text-sm"
                             >
                                 <i className="fab fa-google mr-1 sm:mr-2 text-red-500"></i>
                                 Google
                             </Button>
-                            <Button 
-                                size={isMobile ? "small" : "middle"} 
+                            <Button
+                                size={isMobile ? "small" : "middle"}
                                 className="flex items-center justify-center border border-gray-300 hover:bg-gray-50 text-xs sm:text-sm"
                             >
                                 <i className="fab fa-apple mr-1 sm:mr-2"></i>
@@ -307,32 +301,32 @@ const SignIn = () => {
             {/* Left Column - Login Form */}
             <div className="w-full lg:w-1/2 bg-white flex items-center justify-center">
                 <div className="w-full max-w-md">
-                {/* Header */}
+                    {/* Header */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4">
                             <i className="fas fa-laptop-code text-white text-xl"></i>
                         </div>
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">
                             Welcome Back to Laptop Shop
-                    </h1>
+                        </h1>
                         <p className="text-gray-600">Enter your username and password to continue.</p>
-                </div>
-
-                {/* Form */}
-                    <Form form={form} layout="vertical" onFinish={onSubmit} autoComplete="off">
-                    {/* Demo Info */}
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                        <p className="text-blue-700 text-sm text-center">
-                            <i className="fas fa-info-circle mr-1"></i>
-                            Demo Admin: admin@gmail.com / admin2747 (Đã điền sẵn)
-                        </p>
                     </div>
 
-                    {/* Quick Login Buttons */}
-                    <div className="space-y-3 mb-6">
-                        <p className="text-gray-600 text-sm text-center font-medium">Đăng nhập nhanh:</p>
-                        <div className="grid grid-cols-2 gap-3">
-                                <Button
+                    {/* Form */}
+                    <Form form={form} layout="vertical" onFinish={onSubmit} autoComplete="off">
+                        {/* Demo Info */}
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                            <p className="text-blue-700 text-sm text-center">
+                                <i className="fas fa-info-circle mr-1"></i>
+                                Demo Admin: admin@gmail.com / admin2747 (Đã điền sẵn)
+                            </p>
+                        </div>
+
+                        {/* Quick Login Buttons */}
+                        <div className="space-y-3 mb-6">
+                            <p className="text-gray-600 text-sm text-center font-medium">Đăng nhập nhanh:</p>
+                            <div className="grid grid-cols-2 gap-3">
+                                {/* <Button
                                 type="button"
                                 onClick={() => quickLogin('admin')}
                                 disabled={loading}
@@ -340,23 +334,24 @@ const SignIn = () => {
                             >
                                 <i className="fas fa-user-shield mr-2"></i>
                                 Admin
-                                </Button>
+                                </Button> */}
                                 <Button
-                                type="button"
-                                onClick={() => quickLogin('user')}
-                                disabled={loading}
-                                    className="bg-green-500 hover:bg-green-600 text-white"
-                            >
-                                <i className="fas fa-user mr-2"></i>
-                                User
+                                    type="button"
+                                    onClick={() => quickLogin('user')}
+                                    disabled={loading}
+                                    className="bg-green-500 hover:bg-green-600 text-white col-span-2
+                                    "
+                                >
+                                    <i className="fas fa-user mr-2"></i>
+                                    User
                                 </Button>
+                            </div>
+                            <div className="text-center">
+                                <span className="text-gray-400 text-xs">hoặc điền thông tin bên dưới</span>
+                            </div>
                         </div>
-                        <div className="text-center">
-                            <span className="text-gray-400 text-xs">hoặc điền thông tin bên dưới</span>
-                        </div>
-                    </div>
 
-                    {/* Email field */}
+                        {/* Email field */}
                         <Form.Item
                             label="Email"
                             name="email"
@@ -377,7 +372,7 @@ const SignIn = () => {
                             />
                         </Form.Item>
 
-                    {/* Password field */}
+                        {/* Password field */}
                         <Form.Item
                             label="Password"
                             name="password"
@@ -407,9 +402,9 @@ const SignIn = () => {
                             >
                                 Forgot password?
                             </Button>
-                    </div>
+                        </div>
 
-                    {/* Submit button */}
+                        {/* Submit button */}
                         <Button
                             type="primary"
                             htmlType="submit"
@@ -440,7 +435,7 @@ const SignIn = () => {
                         </div>
 
                         {/* Register link */}
-                    <div className="text-center">
+                        <div className="text-center">
                             <span className="text-gray-600">Don't have an account? </span>
                             <Button
                                 type="link"
@@ -449,18 +444,18 @@ const SignIn = () => {
                             >
                                 Register
                             </Button>
-                    </div>
+                        </div>
                     </Form>
 
-                {/* Footer */}
+                    {/* Footer */}
                     <div className=" text-center">
-                    <button
-                        onClick={() => navigate("/")}
-                        className="text-sm text-gray-500 hover:text-gray-700 transition duration-200 flex items-center justify-center mx-auto"
-                    >
-                        <i className="fas fa-arrow-left mr-2"></i>
-                        Quay về trang chủ
-                    </button>
+                        <button
+                            onClick={() => navigate("/")}
+                            className="text-sm text-gray-500 hover:text-gray-700 transition duration-200 flex items-center justify-center mx-auto"
+                        >
+                            <i className="fas fa-arrow-left mr-2"></i>
+                            Quay về trang chủ
+                        </button>
                     </div>
                 </div>
             </div>
@@ -491,14 +486,14 @@ const SignIn = () => {
                             <div className="text-gray-400 text-sm mb-4">
                                 Your revenue decreased this month by about $421
                             </div>
-                                                         {/* Mini Chart */}
-                             <div className="flex items-end space-x-1 h-12">
-                                 <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '60%', animationDelay: '0s' }}></div>
-                                 <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '80%', animationDelay: '0.2s' }}></div>
-                                 <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '45%', animationDelay: '0.4s' }}></div>
-                                 <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '90%', animationDelay: '0.6s' }}></div>
-                                 <div className="w-3 bg-green-500 rounded-bounce" style={{ height: '75%', animationDelay: '0.8s' }}></div>
-                             </div>
+                            {/* Mini Chart */}
+                            <div className="flex items-end space-x-1 h-12">
+                                <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '60%', animationDelay: '0s' }}></div>
+                                <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '80%', animationDelay: '0.2s' }}></div>
+                                <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '45%', animationDelay: '0.4s' }}></div>
+                                <div className="w-3 bg-blue-500 rounded-t animate-bounce" style={{ height: '90%', animationDelay: '0.6s' }}></div>
+                                <div className="w-3 bg-green-500 rounded-bounce" style={{ height: '75%', animationDelay: '0.8s' }}></div>
+                            </div>
                         </div>
 
                         {/* Customer Segmentation */}
@@ -511,11 +506,11 @@ const SignIn = () => {
                             <div className="text-gray-400 text-sm mb-4">
                                 Total active customers
                             </div>
-                                                         {/* Donut Chart */}
-                             <div className="relative w-16 h-16 mx-auto">
-                                 <div className="w-16 h-16 rounded-full border-4 border-gray-600 border-t-purple-500 border-r-pink-500 border-b-blue-500 animate-spin" style={{ animationDuration: '3s' }}></div>
-                                 <div className="absolute inset-0 w-16 h-16 rounded-full border-4 border-purple-400 animate-ping opacity-30" style={{ animationDuration: '2s' }}></div>
-                             </div>
+                            {/* Donut Chart */}
+                            <div className="relative w-16 h-16 mx-auto">
+                                <div className="w-16 h-16 rounded-full border-4 border-gray-600 border-t-purple-500 border-r-pink-500 border-b-blue-500 animate-spin" style={{ animationDuration: '3s' }}></div>
+                                <div className="absolute inset-0 w-16 h-16 rounded-full border-4 border-purple-400 animate-ping opacity-30" style={{ animationDuration: '2s' }}></div>
+                            </div>
                         </div>
 
                         {/* Sales Targets */}
@@ -528,23 +523,22 @@ const SignIn = () => {
                             <div className="text-gray-400 text-sm mb-4">
                                 3,415 / 4,000 achieved
                             </div>
-                                                         {/* Progress Circle */}
-                             <div className="relative w-16 h-16 mx-auto">
-                                 <div 
-                                     className={`w-16 h-16 rounded-full border-4 border-gray-600 border-t-green-500 transition-all duration-1000 ease-out animate-spin ${
-                                         salesTarget >= 80 ? 'animate-pulse scale-110' : ''
-                                     }`}
-                                     style={{ 
-                                         transform: `rotate(-90deg)`,
-                                         borderTopColor: salesTarget >= 80 ? '#10b981' : '#6b7280',
-                                         borderTopWidth: salesTarget >= 80 ? '6px' : '4px',
-                                         animationDuration: '2s'
-                                     }}
-                                 ></div>
-                                 {salesTarget >= 80 && (
-                                     <div className="absolute inset-0 w-16 h-16 rounded-full border-4 border-green-400 animate-ping opacity-20"></div>
-                                 )}
-                             </div>
+                            {/* Progress Circle */}
+                            <div className="relative w-16 h-16 mx-auto">
+                                <div
+                                    className={`w-16 h-16 rounded-full border-4 border-gray-600 border-t-green-500 transition-all duration-1000 ease-out animate-spin ${salesTarget >= 80 ? 'animate-pulse scale-110' : ''
+                                        }`}
+                                    style={{
+                                        transform: `rotate(-90deg)`,
+                                        borderTopColor: salesTarget >= 80 ? '#10b981' : '#6b7280',
+                                        borderTopWidth: salesTarget >= 80 ? '6px' : '4px',
+                                        animationDuration: '2s'
+                                    }}
+                                ></div>
+                                {salesTarget >= 80 && (
+                                    <div className="absolute inset-0 w-16 h-16 rounded-full border-4 border-green-400 animate-ping opacity-20"></div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Conversion Rates */}
@@ -557,14 +551,14 @@ const SignIn = () => {
                             <div className="text-gray-400 text-sm mb-4">
                                 12,565 Visitors → 1,421 Sales
                             </div>
-                                                         {/* Line Chart */}
-                             <div className="flex items-end space-x-1 h-12">
-                                 <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '40%', animationDelay: '0s' }}></div>
-                                 <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '60%', animationDelay: '0.1s' }}></div>
-                                 <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '80%', animationDelay: '0.2s' }}></div>
-                                 <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '70%', animationDelay: '0.3s' }}></div>
-                                 <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '90%', animationDelay: '0.4s' }}></div>
-                             </div>
+                            {/* Line Chart */}
+                            <div className="flex items-end space-x-1 h-12">
+                                <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '40%', animationDelay: '0s' }}></div>
+                                <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '60%', animationDelay: '0.1s' }}></div>
+                                <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '80%', animationDelay: '0.2s' }}></div>
+                                <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '70%', animationDelay: '0.3s' }}></div>
+                                <div className="w-2 bg-cyan-500 rounded-t animate-bounce" style={{ height: '90%', animationDelay: '0.4s' }}></div>
+                            </div>
                         </div>
                     </div>
 

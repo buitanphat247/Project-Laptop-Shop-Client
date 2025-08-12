@@ -13,13 +13,32 @@ import useDeviceDetection from '../hooks/useDeviceDetection';
 const { Sider, Content } = Layout;
 
 const Setting = () => {
-    const [selectedMenu, setSelectedMenu] = useState('account');
-    const [userInfo, setUserInfo] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    // Gộp state theo nhóm logic để giảm rerender
+    const [dataState, setDataState] = useState({
+        userInfo: null,
+        loading: true,
+        error: null
+    });
+
+    const [uiState, setUiState] = useState({
+        selectedMenu: 'account',
+        mobileMenuOpen: false
+    });
     
     const { isMobile, isTablet, isDesktop } = useDeviceDetection();
+
+    // Destructure để dễ sử dụng
+    const { userInfo, loading, error } = dataState;
+    const { selectedMenu, mobileMenuOpen } = uiState;
+
+    // Helper functions để update state
+    const updateDataState = (updates) => {
+        setDataState(prev => ({ ...prev, ...updates }));
+    };
+
+    const updateUiState = (updates) => {
+        setUiState(prev => ({ ...prev, ...updates }));
+    };
 
     // Lấy user ID từ localStorage hoặc auth context
     const currentUser = getUserProfile();
@@ -28,21 +47,22 @@ const Setting = () => {
     // Fetch user data by ID
     const fetchUserById = useCallback(async (id) => {
         if (!id) {
-            setError('Không tìm thấy ID người dùng');
-            setLoading(false);
+            updateDataState({ error: 'Không tìm thấy ID người dùng', loading: false });
             return;
         }
 
         try {
-            setLoading(true);
+            updateDataState({ loading: true });
             console.log('🚀 Fetching user data for ID:', id);
 
             const response = await axiosClient.get(`/users/${id}`);
 
             console.log('✅ User data fetched successfully:', response.data);
 
-            setUserInfo(response.data.data || response.data);
-            setError(null);
+            updateDataState({ 
+                userInfo: response.data.data || response.data,
+                error: null 
+            });
         } catch (error) {
             console.error('❌ Error fetching user data:', error);
 
@@ -59,12 +79,14 @@ const Setting = () => {
                 updatedAt: new Date().toISOString(),
             };
 
-            setUserInfo(mockUserData);
-            setError('Không thể tải dữ liệu từ server, sử dụng dữ liệu cache');
+            updateDataState({ 
+                userInfo: mockUserData,
+                error: 'Không thể tải dữ liệu từ server, sử dụng dữ liệu cache'
+            });
 
             message.warning('Không thể tải dữ liệu người dùng từ server');
         } finally {
-            setLoading(false);
+            updateDataState({ loading: false });
         }
     }, [currentUser?.fullname, currentUser?.email, currentUser?.role]); // Dependencies
 
@@ -80,16 +102,21 @@ const Setting = () => {
         if (userId) {
             fetchUserById(userId);
         } else {
-            setError('Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.');
-            setLoading(false);
+            updateDataState({ 
+                error: 'Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.',
+                loading: false 
+            });
         }
     }, [userId, fetchUserById]); // Proper dependencies
 
     // Handle user data update
     const handleUserUpdate = useCallback((updatedData) => {
-        setUserInfo(prev => ({
+        updateDataState(prev => ({
             ...prev,
-            ...updatedData
+            userInfo: {
+                ...prev.userInfo,
+                ...updatedData
+            }
         }));
 
         // Optionally refetch from server to ensure sync
@@ -100,9 +127,9 @@ const Setting = () => {
 
     // Handle menu selection for mobile
     const handleMenuSelect = (key) => {
-        setSelectedMenu(key);
+        updateUiState({ selectedMenu: key });
         if (isMobile || isTablet) {
-            setMobileMenuOpen(false);
+            updateUiState({ mobileMenuOpen: false });
         }
     };
 
@@ -219,7 +246,7 @@ const Setting = () => {
                         <Button
                             type="text"
                             icon={<MenuOutlined />}
-                            onClick={() => setMobileMenuOpen(true)}
+                            onClick={() => updateUiState({ mobileMenuOpen: true })}
                             className="text-lg"
                         />
                         <h1 className="text-lg font-semibold text-gray-900">Cài đặt</h1>
@@ -320,7 +347,7 @@ const Setting = () => {
                 <Menu
                     mode="inline"
                     selectedKeys={[selectedMenu]}
-                    onClick={(e) => setSelectedMenu(e.key)}
+                    onClick={(e) => updateUiState({ selectedMenu: e.key })}
                     items={menuItems}
                     className="border-0"
                 />

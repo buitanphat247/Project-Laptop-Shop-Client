@@ -19,8 +19,10 @@ import { getCookie, setCookie, decodeBase64, getUserIdFromCookie } from '../util
  * @property {Object} headers - Headers mặc định cho mọi request
  * @property {boolean} withCredentials - Cho phép gửi cookies trong cross-origin requests
  */
+const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3030/api/v1';
+
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:3030/api/v1', // URL của backend API
+    baseURL: apiBaseUrl, // URL của backend API
     headers: {
         'Content-Type': 'application/json', // Định dạng dữ liệu gửi đi
     },
@@ -137,7 +139,7 @@ axiosClient.interceptors.response.use(
                 // Gọi API refresh token với userId
                 // Thay vì gửi refresh token, chúng ta gửi userId để server tạo token mới
                 const res = await axios.post(
-                    'http://localhost:3030/api/v1/auth/refresh-token',
+                    `${apiBaseUrl}/auth/refresh-token`,
                     { userId: userId }, // Gửi userId thay vì refreshToken
                     { withCredentials: true } // Quan trọng: gửi cookies
                 );

@@ -27,11 +27,9 @@ const Header = () => {
         try {
             await logout();
         } catch (err) { }
-        // setTimeout(() => {
         setConfirmLoading(false);
         setOpen(false);
         navigate('/auth'); // Chuyển về trang chủ sau khi logout
-        // }, 1000);
     };
 
     const showModal = () => {
@@ -177,122 +175,122 @@ const Header = () => {
                         {/* Desktop Navigation */}
                         {isDesktop && (
                             <nav className="hidden lg:block">
-                            <ul className="flex space-x-3 text-base font-medium items-center">
-                                {/* Navigation links */}
+                                <ul className="flex space-x-3 text-base font-medium items-center">
+                                    {/* Navigation links */}
                                     {navigationItems.map((item, index) => (
-                                    <li key={index}>
+                                        <li key={index}>
+                                            <NavLink
+                                                to={item.to}
+                                                end={item.to === "/"}
+                                                className={({ isActive }) =>
+                                                    `flex items-center gap-2 px-4 py-2 rounded-xl transition duration-200 ease-in-out
+                                            ${isActive
+                                                        ? "bg-blue-700 text-white shadow-md"
+                                                        : "text-gray-200 hover:text-white hover:bg-blue-500"}`
+                                                }
+                                                onClick={() => logUserActivity('navigation', { destination: item.label })}
+                                            >
+                                                {item.label}
+                                            </NavLink>
+                                        </li>
+                                    ))}
+                                    {/* Docs menu item - always visible */}
+                                    <li>
                                         <NavLink
-                                            to={item.to}
-                                            end={item.to === "/"}
+                                            to="/docs"
                                             className={({ isActive }) =>
                                                 `flex items-center gap-2 px-4 py-2 rounded-xl transition duration-200 ease-in-out
-                                            ${isActive
-                                                    ? "bg-blue-700 text-white shadow-md"
-                                                    : "text-gray-200 hover:text-white hover:bg-blue-500"}`
-                                            }
-                                            onClick={() => logUserActivity('navigation', { destination: item.label })}
-                                        >
-                                            {item.label}
-                                        </NavLink>
-                                    </li>
-                                ))}
-                                {/* Docs menu item - always visible */}
-                                <li>
-                                    <NavLink
-                                        to="/docs"
-                                        className={({ isActive }) =>
-                                            `flex items-center gap-2 px-4 py-2 rounded-xl transition duration-200 ease-in-out
                                         ${isActive
-                                                ? "bg-blue-700 text-white shadow-md"
-                                                : "text-gray-200 hover:text-white hover:bg-blue-500"}`
-                                        }
-                                        onClick={() => logUserActivity('navigation', { destination: 'Docs' })}
-                                    >
-                                        Docs
-                                    </NavLink>
-                                </li>
-
-                                {/* Notification bell icon */}
-                                {isLoggedIn && (
-                                    <li>
-                                        <button
-                                            className="relative flex items-center px-3 py-2 rounded-full transition duration-200 ease-in-out text-gray-200 hover:text-white hover:bg-blue-500"
-                                            onClick={() => {
-                                                setShowNotifications(true);
-                                                logUserActivity('navigation', { destination: 'notifications' });
-                                            }}
-                                            title="Thông báo (Đang phát triển)"
-                                        >
-                                            <BellOutlined className="text-xl" />
-                                            <span className="absolute -top-1 -right-1 text-xs text-yellow-300">🔒</span>
-                                        </button>
-                                    </li>
-                                )}
-                                    {/* Shopping cart icon */}
-                                {isLoggedIn && (
-                                    <li>
-                                        <button
-                                            className="relative flex items-center px-3 py-2 rounded-full transition duration-200 ease-in-out text-gray-200 hover:text-white hover:bg-blue-500"
-                                            onClick={() => {
-                                                navigate('/cart');
-                                                logUserActivity('navigation', { destination: 'cart' });
-                                            }}
-                                        >
-                                            <ShoppingCartOutlined className="text-2xl" />
-                                                {cartCount > 0 && (
-                                                <span className="absolute bottom-5 right-0.5 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[10px] text-center font-bold border border-white shadow" style={{ fontSize: '10px' }}>{cartCount}</span>
-                                            )}
-                                        </button>
-                                    </li>
-                                )}
-
-                                {/* Avatar Dropdown */}
-                                {isLoggedIn && (
-                                    <li>
-                                        <Dropdown
-                                            menu={{ items: userMenuItems }}
-                                            trigger={['hover']}
-                                            placement="bottomRight"
-                                            arrow={false}
-                                            mouseEnterDelay={0}
-                                            mouseLeaveDelay={0.1}
-                                        >
-                                            <div className="flex items-center cursor-pointer">
-                                                {user?.avatar ? (
-                                                    <img
-                                                        src={user.avatar}
-                                                        alt="avatar"
-                                                        className="object-cover rounded-full w-10 h-10 border-2 border-white hover:border-blue-400 transition"
-                                                        title={userFullname || "Tài khoản"}
-                                                    />
-                                                ) : (
-                                                    <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center border-2 border-white hover:border-blue-400 transition">
-                                                        <UserOutlined className="text-white text-lg" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </Dropdown>
-                                    </li>
-                                )}
-                                {!isLoggedIn && (
-                                    <li>
-                                        <NavLink
-                                            to="/auth"
-                                            className={({ isActive }) =>
-                                                `flex items-center gap-2 px-4 py-2 rounded-xl transition duration-200 ease-in-out
-                                            ${isActive
                                                     ? "bg-blue-700 text-white shadow-md"
                                                     : "text-gray-200 hover:text-white hover:bg-blue-500"}`
                                             }
-                                            onClick={() => logUserActivity('navigation', { destination: 'auth' })}
+                                            onClick={() => logUserActivity('navigation', { destination: 'Docs' })}
                                         >
-                                            <i className="fa-solid fa-right-to-bracket"></i>
-                                            Đăng nhập
+                                            Docs
                                         </NavLink>
                                     </li>
-                                )}
-                            </ul>
-                        </nav>
+
+                                    {/* Notification bell icon */}
+                                    {isLoggedIn && (
+                                        <li>
+                                            <button
+                                                className="relative flex items-center px-3 py-2 rounded-full transition duration-200 ease-in-out text-gray-200 hover:text-white hover:bg-blue-500"
+                                                onClick={() => {
+                                                    setShowNotifications(true);
+                                                    logUserActivity('navigation', { destination: 'notifications' });
+                                                }}
+                                                title="Thông báo (Đang phát triển)"
+                                            >
+                                                <BellOutlined className="text-xl" />
+                                                <span className="absolute -top-1 -right-1 text-xs text-yellow-300">🔒</span>
+                                            </button>
+                                        </li>
+                                    )}
+                                    {/* Shopping cart icon */}
+                                    {isLoggedIn && (
+                                        <li>
+                                            <button
+                                                className="relative flex items-center px-3 py-2 rounded-full transition duration-200 ease-in-out text-gray-200 hover:text-white hover:bg-blue-500"
+                                                onClick={() => {
+                                                    navigate('/cart');
+                                                    logUserActivity('navigation', { destination: 'cart' });
+                                                }}
+                                            >
+                                                <ShoppingCartOutlined className="text-2xl" />
+                                                {cartCount > 0 && (
+                                                    <span className="absolute bottom-5 right-0.5 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[10px] text-center font-bold border border-white shadow" style={{ fontSize: '10px' }}>{cartCount}</span>
+                                                )}
+                                            </button>
+                                        </li>
+                                    )}
+
+                                    {/* Avatar Dropdown */}
+                                    {isLoggedIn && (
+                                        <li>
+                                            <Dropdown
+                                                menu={{ items: userMenuItems }}
+                                                trigger={['hover']}
+                                                placement="bottomRight"
+                                                arrow={false}
+                                                mouseEnterDelay={0}
+                                                mouseLeaveDelay={0.1}
+                                            >
+                                                <div className="flex items-center cursor-pointer">
+                                                    {user?.avatar ? (
+                                                        <img
+                                                            src={user.avatar}
+                                                            alt="avatar"
+                                                            className="object-cover rounded-full w-10 h-10 border-2 border-white hover:border-blue-400 transition"
+                                                            title={userFullname || "Tài khoản"}
+                                                        />
+                                                    ) : (
+                                                        <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center border-2 border-white hover:border-blue-400 transition">
+                                                            <UserOutlined className="text-white text-lg" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </Dropdown>
+                                        </li>
+                                    )}
+                                    {!isLoggedIn && (
+                                        <li>
+                                            <NavLink
+                                                to="/auth"
+                                                className={({ isActive }) =>
+                                                    `flex items-center gap-2 px-4 py-2 rounded-xl transition duration-200 ease-in-out
+                                            ${isActive
+                                                        ? "bg-blue-700 text-white shadow-md"
+                                                        : "text-gray-200 hover:text-white hover:bg-blue-500"}`
+                                                }
+                                                onClick={() => logUserActivity('navigation', { destination: 'auth' })}
+                                            >
+                                                <i className="fa-solid fa-right-to-bracket"></i>
+                                                Đăng nhập
+                                            </NavLink>
+                                        </li>
+                                    )}
+                                </ul>
+                            </nav>
                         )}
 
                         {/* Mobile/Tablet Right Side */}
@@ -469,9 +467,9 @@ const Header = () => {
                                 <button
                                     key={index}
                                     className={`flex items-center space-x-3 px-3 py-3 rounded-lg transition-colors w-full text-left
-                                ${item.danger 
-                                        ? "text-red-600 hover:bg-red-50" 
-                                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"}`}
+                                ${item.danger
+                                            ? "text-red-600 hover:bg-red-50"
+                                            : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"}`}
                                     onClick={() => {
                                         handleMobileMenuClose();
                                         item.onClick();
@@ -504,8 +502,8 @@ const Header = () => {
             </Drawer>
 
             {/* Cart Animation */}
-            <CartAnimation 
-                show={showAnimation} 
+            <CartAnimation
+                show={showAnimation}
                 onAnimationEnd={hideAnimation}
             />
 

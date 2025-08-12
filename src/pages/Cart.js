@@ -17,43 +17,60 @@ import { useCart } from '../context/CartContext';
 const { Title, Text } = Typography;
 
 const Cart = () => {
-    const [cartItems, setCartItems] = useState([]);
-    console.log('cartItems: ', cartItems);
-    const [modal, contextHolder] = Modal.useModal();
-
-
-    const [promoCode, setPromoCode] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [pageLoading, setPageLoading] = useState(true);
-    const [showReceiverForm, setShowReceiverForm] = useState(false);
-    const [receiverInfo, setReceiverInfo] = useState({
-        shipName: '',
-        shipPhone: '',
-        shipAddress: '',
-        email: ''
+    // Gộp state theo nhóm logic để giảm rerender
+    const [dataState, setDataState] = useState({
+        cartItems: [],
+        loading: false,
+        pageLoading: true
     });
+
+    const [formState, setFormState] = useState({
+        promoCode: '',
+        showReceiverForm: false,
+        receiverInfo: {
+            shipName: '',
+            shipPhone: '',
+            shipAddress: '',
+            email: ''
+        }
+    });
+
+    const [modal, contextHolder] = Modal.useModal();
     const [form] = Form.useForm();
+
+    // Destructure để dễ sử dụng
+    const { cartItems, loading, pageLoading } = dataState;
+    const { promoCode, showReceiverForm, receiverInfo } = formState;
+
+    // Helper functions để update state
+    const updateDataState = (updates) => {
+        setDataState(prev => ({ ...prev, ...updates }));
+    };
+
+    const updateFormState = (updates) => {
+        setFormState(prev => ({ ...prev, ...updates }));
+    };
     useEffect(() => {
         let timer;
         const fetchCart = async () => {
             const userId = getUserProfile()?.id;
             if (!userId) {
-                setPageLoading(false);
+                updateDataState({ pageLoading: false });
                 return;
             }
-            setLoading(true);
+            updateDataState({ loading: true });
             try {
                 const res = await axiosClient.get(`/get-cart-items-of-user/${userId}`);
                 const { data } = res.data;
-                setCartItems(data.products);
+                updateDataState({ cartItems: data.products });
             } catch (err) {
                 message.error('Không thể tải giỏ hàng');
-                setCartItems([]);
+                updateDataState({ cartItems: [] });
             } finally {
-                setLoading(false);
+                updateDataState({ loading: false });
                 // Đảm bảo hiệu ứng loading tối thiểu 500ms
                 timer = setTimeout(() => {
-                    setPageLoading(false);
+                    updateDataState({ pageLoading: false });
                 }, 500);
             }
         };
@@ -75,7 +92,7 @@ const Cart = () => {
             // Fetch lại giỏ hàng sau khi cập nhật
             const res = await axiosClient.get(`/get-cart-items-of-user/${userId}`);
             const { data } = res.data;
-            setCartItems(data.products);
+            updateDataState({ cartItems: data.products });
             message.success('Cập nhật số lượng thành công!');
         } catch (error) {
             message.error('Cập nhật số lượng thất bại!');
@@ -105,7 +122,7 @@ const Cart = () => {
                 try {
                     await removeCartItemById(item.cartItemId);
                     // Nếu muốn fetch lại cartItems tại đây, có thể gọi lại API hoặc reload page nếu cần
-                    setCartItems((prev) => prev.filter((i) => i.cartItemId !== item.cartItemId));
+                    updateDataState({ cartItems: cartItems.filter((i) => i.cartItemId !== item.cartItemId) });
                     message.success('Đã xóa sản phẩm khỏi giỏ hàng!');
                 } catch (err) {
                     message.error('Xóa thất bại!');
@@ -123,14 +140,13 @@ const Cart = () => {
             <div className="flex justify-center items-center min-h-[70vh] px-4">
                 <div className="text-center">
                     <Spin size="large" tip="Đang tải sản phẩm..." />
-                    <p className="mt-4 text-gray-600 text-sm sm:text-base">Vui lòng chờ trong giây lát...</p>
                 </div>
             </div>
         );
     }
 
     const handleOpenModal = () => {
-        setShowReceiverForm(true);
+        updateFormState({ showReceiverForm: true });
     };
 
     return (
@@ -146,7 +162,7 @@ const Cart = () => {
                             shippingFee={shippingFee}
                             total={total}
                             promoCode={promoCode}
-                            setPromoCode={setPromoCode}
+                            setPromoCode={(value) => updateFormState({ promoCode: value })}
                             onCheckout={async () => {
                                 try {
                                     const userId = getUserProfile()?.id;
@@ -188,7 +204,7 @@ const Cart = () => {
                     shippingFee={shippingFee}
                     total={total}
                     promoCode={promoCode}
-                    setPromoCode={setPromoCode}
+                    setPromoCode={(value) => updateFormState({ promoCode: value })}
                     onCheckout={async () => {
                         try {
                             const userId = getUserProfile()?.id;
@@ -203,23 +219,23 @@ const Cart = () => {
                     }}
                 />
             </div>
-            <Modal
-                title="Thông tin người nhận"
-                open={showReceiverForm}
-                onCancel={() => setShowReceiverForm(false)}
-                footer={[
-                    <Button key="cancel" onClick={() => setShowReceiverForm(false)}>
-                        Hủy
-                    </Button>,
-                    <Button form="receiverForm" key="submit" htmlType="submit" type="primary">
-                        Xác nhận & Thanh toán
-                    </Button>
-                ]}
-                onOk={form.submit}
-                width="90%"
-                style={{ maxWidth: '500px' }}
-                centered
-            >
+                            <Modal
+                    title="Thông tin người nhận"
+                    open={showReceiverForm}
+                    onCancel={() => updateFormState({ showReceiverForm: false })}
+                    footer={[
+                        <Button key="cancel" onClick={() => updateFormState({ showReceiverForm: false })}>
+                            Hủy
+                        </Button>,
+                        <Button form="receiverForm" key="submit" htmlType="submit" type="primary">
+                            Xác nhận & Thanh toán
+                        </Button>
+                    ]}
+                    onOk={form.submit}
+                    width="90%"
+                    style={{ maxWidth: '500px' }}
+                    centered
+                >
                 <Form
                     id="receiverForm"
                     form={form}
@@ -227,8 +243,10 @@ const Cart = () => {
                     autoComplete="off"
                     onFinish={async (values) => {
                         console.log('values:', values);
-                        setReceiverInfo(values);
-                        setShowReceiverForm(false);
+                        updateFormState({ 
+                            receiverInfo: values,
+                            showReceiverForm: false 
+                        });
                         // Tiếp tục quy trình thanh toán
                         const userId = getUserProfile()?.id;
                         const orderData = {

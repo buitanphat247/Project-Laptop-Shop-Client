@@ -56,7 +56,6 @@ const FavoriteProduct = () => {
                 axiosClient.get('/category') // Fetch categories
             ]);
 
-            console.log('productRes: ', productRes);
 
 
             const { data: productData, pagination } = productRes.data;
@@ -68,13 +67,11 @@ const FavoriteProduct = () => {
                 ...categoryData.map(c => ({ value: c.id, label: c.name }))
             ];
 
-            setTimeout(() => {
-                setProducts(Array.isArray(productData) ? productData : []);
-                setTotalProducts(pagination?.total || 0);
-                setCurrentPage(page);
-                setCategories(categoryOptionsFormatted); // Set fetched categories
-                setLoading(false);
-            }, 250);
+            setProducts(Array.isArray(productData) ? productData : []);
+            setTotalProducts(pagination?.total || 0);
+            setCurrentPage(page);
+            setCategories(categoryOptionsFormatted); // Set fetched categories
+            setLoading(false);
 
         } catch (error) {
             console.error('❌ Error fetching products or categories:', error);

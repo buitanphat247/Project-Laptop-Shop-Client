@@ -10,14 +10,15 @@ import { useDeviceDetection } from '../hooks/useDeviceDetection';
 
 const Product = () => {
     const { isDesktop } = useDeviceDetection();
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalProducts, setTotalProducts] = useState(0);
-    const [error, setError] = useState(null);
+    const [productState, setProductState] = useState({
+        products: [],
+        loading: true,
+        currentPage: 1,
+        totalProducts: 0,
+        error: null
+    });
     const [filtersVisible, setFiltersVisible] = useState(false);
     const [categories, setCategories] = useState([]);
-
     // Filter states
     const [filters, setFilters] = useState({
         search: '',
@@ -27,12 +28,20 @@ const Product = () => {
         minRating: 0
     });
 
+    // Tạo helper function để update state
+    const updateProductState = (updates) => {
+        setProductState(prev => ({ ...prev, ...updates }));
+    };
+
+    // Destructure để sử dụng
+    const { products, loading, currentPage, totalProducts, error } = productState;
+
+
     const pageSize = 20;
 
     // Fetch products and categories from API with filters
     const fetchProducts = useCallback(async (page = 1, currentFilters = filters) => {
-        setLoading(true);
-        setError(null);
+        updateProductState({ loading: true, error: null });
 
         try {
 
@@ -65,17 +74,19 @@ const Product = () => {
                 ...categoryData.map(c => ({ value: c.id, label: c.name }))
             ];
 
-            setTimeout(() => {
-                setProducts(Array.isArray(productData) ? productData : []);
-                setTotalProducts(pagination?.total || 0);
-                setCurrentPage(page);
-                setCategories(categoryOptionsFormatted); // Set fetched categories
-                setLoading(false);
-            }, 250);
+            // setTimeout(() => {
+            updateProductState({
+                products: Array.isArray(productData) ? productData : [],
+                totalProducts: pagination?.total || 0,
+                currentPage: page,
+                loading: false
+            });
+            setCategories(categoryOptionsFormatted); // Set fetched categories
+            // }, 250);
 
         } catch (error) {
             console.error('❌ Error fetching products or categories:', error);
-            setError('Không thể tải sản phẩm hoặc danh mục');
+            updateProductState({ error: 'Không thể tải sản phẩm hoặc danh mục' });
 
             // Mock data fallback
             const mockProducts = Array.from({ length: pageSize }, (_, index) => {
@@ -91,12 +102,12 @@ const Product = () => {
                 };
             });
 
-            setTimeout(() => {
-                setProducts(Array.isArray(mockProducts) ? mockProducts : []);
-                setTotalProducts(750);
-                setCategories(defaultCategoryOptions); // Fallback to default categories
-                setLoading(false);
-            }, 250);
+            updateProductState({
+                products: Array.isArray(mockProducts) ? mockProducts : [],
+                totalProducts: 750,
+                loading: false
+            });
+            setCategories(defaultCategoryOptions); // Fallback to default categories
 
             message.warning('Không thể tải dữ liệu từ server, hiển thị dữ liệu mẫu');
         }
@@ -106,7 +117,7 @@ const Product = () => {
     const handleFilterChange = (key, value) => {
         const newFilters = { ...filters, [key]: value };
         setFilters(newFilters);
-        setCurrentPage(1);
+        updateProductState({ currentPage: 1 });
         fetchProducts(1, newFilters);
     };
 
@@ -114,7 +125,7 @@ const Product = () => {
     const handleSearch = (searchValue) => {
         const newFilters = { ...filters, search: searchValue };
         setFilters(newFilters);
-        setCurrentPage(1);
+        updateProductState({ currentPage: 1 });
         fetchProducts(1, newFilters);
     };
 
@@ -128,13 +139,13 @@ const Product = () => {
             minRating: 0
         };
         setFilters(defaultFilters);
-        setCurrentPage(1);
+        updateProductState({ currentPage: 1 });
         fetchProducts(1, defaultFilters);
     };
 
     // Handle page change
     const handlePageChange = (page) => {
-        setCurrentPage(page);
+        updateProductState({ currentPage: page });
         fetchProducts(page);
 
         window.scrollTo({

@@ -51,18 +51,44 @@ const Detail = () => {
     const navigate = useNavigate();
     const quantityRef = useRef();
 
-    // State
-    const [product, setProduct] = useState(null);
-    const [relatedProducts, setRelatedProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [loadingRelated, setLoadingRelated] = useState(false);
-    const [error, setError] = useState(null);
-    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-    const [isDescriptionModalVisible, setIsDescriptionModalVisible] = useState(false);
-    const [isShareModalVisible, setIsShareModalVisible] = useState(false);
-    const [copiedLink, setCopiedLink] = useState(false);
-    const [isAllReviewsModalVisible, setIsAllReviewsModalVisible] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
+    // State - Gộp theo nhóm logic để giảm rerender
+    const [dataState, setDataState] = useState({
+        product: null,
+        relatedProducts: [],
+        loading: true,
+        loadingRelated: false,
+        error: null
+    });
+
+    const [uiState, setUiState] = useState({
+        selectedImageIndex: 0,
+        isDescriptionModalVisible: false,
+        isShareModalVisible: false,
+        isAllReviewsModalVisible: false
+    });
+
+    const [interactionState, setInteractionState] = useState({
+        copiedLink: false,
+        isLiked: false
+    });
+
+    // Destructure để dễ sử dụng
+    const { product, relatedProducts, loading, loadingRelated, error } = dataState;
+    const { selectedImageIndex, isDescriptionModalVisible, isShareModalVisible, isAllReviewsModalVisible } = uiState;
+    const { copiedLink, isLiked } = interactionState;
+
+    // Helper functions để update state
+    const updateDataState = (updates) => {
+        setDataState(prev => ({ ...prev, ...updates }));
+    };
+
+    const updateUiState = (updates) => {
+        setUiState(prev => ({ ...prev, ...updates }));
+    };
+
+    const updateInteractionState = (updates) => {
+        setInteractionState(prev => ({ ...prev, ...updates }));
+    };
 
     // Memoized values
     const formatPrice = useCallback((price) => {
@@ -96,49 +122,46 @@ const Detail = () => {
     // API functions - Define fetchRelatedProducts first
     const fetchRelatedProducts = useCallback(async (categoryId) => {
         try {
-            setLoadingRelated(true);
+            updateDataState({ loadingRelated: true });
             const response = await axiosClient.get(`/get-list-product-by-category-id/${categoryId}`);
             const { data } = response.data;
 
             if (data && Array.isArray(data)) {
-                setRelatedProducts(data.slice(0, 11));
+                updateDataState({ relatedProducts: data.slice(0, 11) });
             } else {
-                setRelatedProducts([]);
+                updateDataState({ relatedProducts: [] });
             }
         } catch (error) {
             console.error('Error fetching related products:', error);
-            setRelatedProducts([]);
+            updateDataState({ relatedProducts: [] });
         } finally {
-            setLoadingRelated(false);
+            updateDataState({ loadingRelated: false });
         }
     }, []);
 
     const fetchProductById = useCallback(async (productId) => {
         try {
-            setLoading(true);
-            setError(null);
+            updateDataState({ loading: true, error: null });
             const userId = getUserProfile()?.id;
-            console.log('userId: ', userId);
             const response = userId ? await axiosClient.get(`/get-product-double-id/${productId}/${userId}`) : await axiosClient.get(`/get-product/${productId}`);
-            console.log('response: ', response);
             const { data } = response.data;
 
             if (data) {
-                setProduct(data);
-                setIsLiked(!!data.isFavorite); // cập nhật trạng thái tim từ API
+                updateDataState({ product: data });
+                updateInteractionState({ isLiked: !!data.isFavorite }); // cập nhật trạng thái tim từ API
                 if (data.category?.id) {
                     fetchRelatedProducts(data.category.id, productId);
                 }
             } else {
-                setError('Không tìm thấy sản phẩm');
+                updateDataState({ error: 'Không tìm thấy sản phẩm' });
                 toast.error('Không tìm thấy sản phẩm');
             }
         } catch (error) {
             console.error('Error fetching product:', error);
-            setError('Lỗi khi tải sản phẩm');
+            updateDataState({ error: 'Lỗi khi tải sản phẩm' });
             toast.error('Không thể tải sản phẩm');
         } finally {
-            setLoading(false);
+            updateDataState({ loading: false });
         }
     }, [fetchRelatedProducts]);
 
@@ -181,9 +204,8 @@ const Detail = () => {
                     userId,
                     productId: product.id
                 });
-                setIsLiked(true);
+                updateInteractionState({ isLiked: true });
             } catch (error) {
-                message.error('Lỗi khi đính tim sản phẩm');
             }
         } else {
             // Nếu muốn bỏ tim, chỉ set lại UI
@@ -192,19 +214,19 @@ const Detail = () => {
                     userId,
                     productId: product.id
                 });
-                setIsLiked(true);
+                updateInteractionState({ isLiked: true });
             } catch (error) {
                 console.log('error: ', error);
             }
-            setIsLiked(false);
+            updateInteractionState({ isLiked: false });
         }
     }, [product?.id, isLiked]);
 
     const copyProductLink = useCallback(async () => {
         try {
             await navigator.clipboard.writeText(window.location.href);
-            setCopiedLink(true);
-            setTimeout(() => setCopiedLink(false), 2000);
+            updateInteractionState({ copiedLink: true });
+            updateInteractionState({ copiedLink: false });
         } catch (err) {
         }
     }, []);
@@ -233,8 +255,7 @@ const Detail = () => {
         if (id) {
             fetchProductById(id);
         } else {
-            setError('ID sản phẩm không hợp lệ');
-            setLoading(false);
+            updateDataState({ error: 'ID sản phẩm không hợp lệ', loading: false });
         }
     }, [id, fetchProductById]);
 
@@ -301,7 +322,7 @@ const Detail = () => {
                             images={images}
                             productName={product.name}
                             selectedImageIndex={selectedImageIndex}
-                            setSelectedImageIndex={setSelectedImageIndex}
+                            setSelectedImageIndex={(index) => updateUiState({ selectedImageIndex: index })}
                         />
                     </Col>
 
@@ -363,7 +384,7 @@ const Detail = () => {
                                     </Col>
                                 </Row>
 
-                                <Button
+                                {/* <Button
                                     type="primary"
                                     size="large"
                                     block
@@ -373,12 +394,12 @@ const Detail = () => {
                                     danger
                                 >
                                     {product.stock === 0 ? 'Hết hàng' : 'Mua ngay'}
-                                </Button>
+                                </Button> */}
 
                                 <Button
                                     block
                                     icon={<FileTextOutlined />}
-                                    onClick={() => setIsDescriptionModalVisible(true)}
+                                    onClick={() => updateUiState({ isDescriptionModalVisible: true })}
                                     className="border-dashed border-blue-300 text-blue-600 hover:bg-blue-50"
                                 >
                                     Xem mô tả chi tiết
@@ -387,7 +408,7 @@ const Detail = () => {
                                 <Button
                                     block
                                     icon={<ShareAltOutlined />}
-                                    onClick={() => setIsShareModalVisible(true)}
+                                    onClick={() => updateUiState({ isShareModalVisible: true })}
                                 >
                                     Chia sẻ sản phẩm
                                 </Button>
@@ -403,7 +424,7 @@ const Detail = () => {
                 <ProductReviews
                     RATING_DATA={RATING_DATA}
                     SAMPLE_REVIEWS={SAMPLE_REVIEWS}
-                    onShowAllReviews={() => setIsAllReviewsModalVisible(true)}
+                    onShowAllReviews={() => updateUiState({ isAllReviewsModalVisible: true })}
                 />
 
                 {/* Related Products Section */}
@@ -416,22 +437,22 @@ const Detail = () => {
                 {/* Product Reviews Section - All Reviews Modal */}
                 <AllReviewsModal
                     open={isAllReviewsModalVisible}
-                    onClose={() => setIsAllReviewsModalVisible(false)}
+                    onClose={() => updateUiState({ isAllReviewsModalVisible: false })}
                     RATING_DATA={RATING_DATA}
                     SAMPLE_REVIEWS={SAMPLE_REVIEWS}
                 />
 
                 <DescriptionModal
                     open={isDescriptionModalVisible}
-                    onClose={() => setIsDescriptionModalVisible(false)}
+                    onClose={() => updateUiState({ isDescriptionModalVisible: false })}
                     content={product?.content}
                 />
 
                 <ShareModal
                     open={isShareModalVisible}
                     onClose={() => {
-                        setIsShareModalVisible(false);
-                        setCopiedLink(false);
+                        updateUiState({ isShareModalVisible: false });
+                        updateInteractionState({ copiedLink: false });
                     }}
                     copiedLink={copiedLink}
                     copyProductLink={copyProductLink}

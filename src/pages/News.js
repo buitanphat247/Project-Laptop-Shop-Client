@@ -46,18 +46,15 @@ const News = () => {
                 }
             });
 
-            console.log('✅ News fetched successfully:', response.data);
 
             // Sử dụng data từ API trực tiếp không xử lý gì
             const { data, pagination } = response.data;
 
             // Set timeout 500ms cho loading state
-            setTimeout(() => {
-                setNews(data || []);
-                setTotalNews(pagination?.total || 0);
-                setCurrentPage(page);
-                setLoading(false);
-            }, 250);
+            setNews(data || []);
+            setTotalNews(pagination?.total || 0);
+            setCurrentPage(page);
+            setLoading(false);
 
         } catch (error) {
             console.error('❌ Error fetching news:', error);
@@ -180,7 +177,7 @@ const News = () => {
             {/* News Grid */}
             {!loading && news.length > 0 && (
                 <>
-                   <div className="wrapper grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                    <div className="wrapper grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                         {news.map((article, index) => (
                             <NewsCard
                                 key={article.id || `news-${currentPage}-${index}`}
@@ -189,8 +186,8 @@ const News = () => {
                         ))}
                     </div>
 
-                       {/* Pagination */}
-                       <div className="flex justify-center mb-6 sm:mb-8 lg:px-8">
+                    {/* Pagination */}
+                    <div className="flex justify-center mb-6 sm:mb-8 lg:px-8">
                         <Pagination
                             current={currentPage}
                             total={totalNews}
