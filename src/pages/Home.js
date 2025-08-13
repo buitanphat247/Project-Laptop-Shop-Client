@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import SectionHeader from '../components/section/SectionHeader';
 import CardProduct from '../components/card/CardProduct';
-import CardNews from '../trash/CardNews';
 import { FaSimCard, FaSuitcase, FaMobileAlt, FaWifi, FaPhoneAlt, FaEllipsisH } from "react-icons/fa";
 import CardService from '../components/card/CardService';
 import { Swiper, SwiperSlide } from 'swiper/react';
