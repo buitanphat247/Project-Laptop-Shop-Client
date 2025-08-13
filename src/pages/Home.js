@@ -121,12 +121,12 @@ const Home = () => {
 
 
             {/* Swiper sản phẩm nổi bật */}
-            <Swiper 
+            <Swiper
                 slidesPerView={1}
                 spaceBetween={20}
                 // pagination={{ clickable: true }} 
-                autoplay={{ delay: 2500, disableOnInteraction: false }} 
-                modules={[Autoplay, Pagination, Navigation]} 
+                autoplay={{ delay: 2500, disableOnInteraction: false }}
+                modules={[Autoplay, Pagination, Navigation]}
                 className="mySwiper"
                 breakpoints={{
                     640: {
@@ -171,7 +171,7 @@ const Home = () => {
                         const firstCategory = Object.keys(allProductsByCategory)[0];
                         const products = allProductsByCategory[firstCategory] || [];
                         const selectedProducts = products.slice(0, 2); // Lấy 2 sản phẩm đầu tiên
-                        
+
                         if (selectedProducts.length === 0) {
                             return (
                                 <div className="col-span-1 md:col-span-2 text-center py-8 text-gray-500">
@@ -244,10 +244,10 @@ const Home = () => {
                     spaceBetween={20}
                     // pagination={{ clickable: true, dynamicBullets: true }}
                     autoplay={{ delay: 2500, disableOnInteraction: false }}
-                    breakpoints={{ 
-                        640: { slidesPerView: 2, spaceBetween: 5 }, 
+                    breakpoints={{
+                        640: { slidesPerView: 2, spaceBetween: 5 },
                         768: { slidesPerView: 2, spaceBetween: 20 },
-                        1024: { slidesPerView: 4, spaceBetween: 20 } 
+                        1024: { slidesPerView: 4, spaceBetween: 20 }
                     }}
                     modules={[Autoplay, Pagination]}
                     className="newsSwiper"
@@ -257,7 +257,7 @@ const Home = () => {
                     )) : (
                         [1, 2, 3].map(i => (
                             <SwiperSlide key={i}>
-                                <CardNews
+                                <NewsCard
                                     title={`Tin tức ${i}`}
                                     description="Mô tả tin tức..."
                                     imageUrl="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/09/hinh-nen-may-tinh-4k-cong-nghe-7.jpg"
