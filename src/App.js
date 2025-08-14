@@ -15,7 +15,6 @@ import { CartProvider } from './context/CartContext';
 import SplashWrapper from './components/splash/SplashWrapper';
 import SocialIconsController from "./components/SocialIconsController";
 import Document from "./pages/Document";
-import { Analytics } from "@vercel/analytics/next"
 
 import MainLayout from './layouts/MainLayout';
 import AdminLayout from './layouts/AdminLayout';
@@ -50,7 +49,6 @@ const HelpSupport = lazy(() => import('./pages/HelpSupport'));
 function App() {
   return (
     <AuthProvider>
-      <Analytics />
       <CartProvider>
         <>
           <ToastConfig />
