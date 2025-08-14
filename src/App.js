@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Spin } from 'antd';
 import "./styles/App.css";
 import ToastConfig from "./config/toast";
@@ -20,35 +20,36 @@ import SocialIconsController from "./components/SocialIconsController";
 import Document from "./pages/Document";
 
 import MainLayout from './layouts/MainLayout';
-import Home from './pages/Home';
-import Product from './pages/Product';
-import About from './pages/About';
-import Detail from './pages/Detail';
-import Cart from './pages/Cart';
-import Setting from './pages/Setting';
-import SignIn from './pages/auth/SignIn';
-import SignUp from './pages/auth/SignUp';
-import ResetPassword from './pages/auth/ResetPassword';
 import AdminLayout from './layouts/AdminLayout';
-import ProductManager from './pages/admin/ProductManager';
-import OrderManager from './pages/admin/OrderManager';
-import UserManager from './pages/admin/UserManager';
-import NewsManager from './pages/admin/NewsManager';
-import Dashboard from './pages/admin/Dashboard';
-import CategoryManager from './pages/admin/CategoryManager';
-import News from './pages/News';
-import Checkout from './pages/Checkout';
-import Order from './pages/Order';
-import NotFound from './pages/NotFound';
-import RolePermission from './pages/admin/RolePermission';
-import Support from './pages/Support';
-import PermissionManager from './pages/admin/PermissionManager';
-import FavoriteProduct from './pages/FavoriteProduct';
-import HelpSupport from "./pages/HelpSupport";
+
+// Lazy load các trang chính
+const Home = lazy(() => import('./pages/Home'));
+const Product = lazy(() => import('./pages/Product'));
+const About = lazy(() => import('./pages/About'));
+const Detail = lazy(() => import('./pages/Detail'));
+const Cart = lazy(() => import('./pages/Cart'));
+const Setting = lazy(() => import('./pages/Setting'));
+const SignIn = lazy(() => import('./pages/auth/SignIn'));
+const SignUp = lazy(() => import('./pages/auth/SignUp'));
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
+const ProductManager = lazy(() => import('./pages/admin/ProductManager'));
+const OrderManager = lazy(() => import('./pages/admin/OrderManager'));
+const UserManager = lazy(() => import('./pages/admin/UserManager'));
+const NewsManager = lazy(() => import('./pages/admin/NewsManager'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const CategoryManager = lazy(() => import('./pages/admin/CategoryManager'));
+const News = lazy(() => import('./pages/News'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Order = lazy(() => import('./pages/Order'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const RolePermission = lazy(() => import('./pages/admin/RolePermission'));
+const Support = lazy(() => import('./pages/Support'));
+const PermissionManager = lazy(() => import('./pages/admin/PermissionManager'));
+const FavoriteProduct = lazy(() => import('./pages/FavoriteProduct'));
+const HelpSupport = lazy(() => import('./pages/HelpSupport'));
+
 
 function App() {
-
-
   return (
     <AuthProvider>
       <CartProvider>
@@ -60,52 +61,54 @@ function App() {
               <ZaloButton></ZaloButton>
               <FacebookButton></FacebookButton>
             </SocialIconsController>
-            <Routes>
-              <Route path="/" element={
-                <SplashWrapper>
-                  <MainLayout />
-                </SplashWrapper>
-              }>
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Product />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/news" element={<News />} />
-                <Route path="/product/:id" element={<Detail />} />
-                <Route path="/favorite-products" element={<FavoriteProduct />} />
-                {/* <Route path="/feedback" element={<Feedback />} /> */}
-                <Route path="/support" element={<Support />} />
-                <Route path="/cart" element={<RequireAuth><Cart /></RequireAuth>} />
-                <Route path="/setting" element={<RequireAuth><Setting /></RequireAuth>} />
-                <Route path="/vnpay-return" element={<Checkout />} />
-                <Route path="/orders" element={<Order />} />
-                <Route path="/docs" element={<Document />} />
-                <Route path="/help&support" element={<HelpSupport />} />
-              </Route>
-              {/* Auth Routes - Không cần splash */}
-              <Route path="/signin" element={<RedirectIfAuthenticated><SignIn /></RedirectIfAuthenticated>} />
-              <Route path="/signup" element={<RedirectIfAuthenticated><SignUp /></RedirectIfAuthenticated>} />
-              <Route path="/reset-password" element={<RedirectIfAuthenticated><ResetPassword /></RedirectIfAuthenticated>} />
-              {/* Redirect /auth to /signin */}
-              <Route path="/auth" element={<Navigate to="/signin" replace />} />
-              {/* Admin Routes - Chỉ hiển thị trên Desktop */}
-              <Route path="/admin" element={
-                <RequireAdminAuth>
-                  <MobileAdminRedirect>
-                    <AdminLayout />
-                  </MobileAdminRedirect>
-                </RequireAdminAuth>
-              }>
-                <Route index element={<Dashboard />} />
-                <Route path="products" element={<ProductManager />} />
-                <Route path="categories" element={<CategoryManager />} />
-                <Route path="orders" element={<OrderManager />} />
-                <Route path="users" element={<UserManager />} />
-                <Route path="news" element={<NewsManager />} />
-                <Route path="permissions" element={<PermissionManager />} />
-                <Route path="roles-permission" element={<RolePermission />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Suspense >
+              <Routes>
+                <Route path="/" element={
+                  <SplashWrapper>
+                    <MainLayout />
+                  </SplashWrapper>
+                }>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/products" element={<Product />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/news" element={<News />} />
+                  <Route path="/product/:id" element={<Detail />} />
+                  <Route path="/favorite-products" element={<FavoriteProduct />} />
+                  {/* <Route path="/feedback" element={<Feedback />} /> */}
+                  <Route path="/support" element={<Support />} />
+                  <Route path="/cart" element={<RequireAuth><Cart /></RequireAuth>} />
+                  <Route path="/setting" element={<RequireAuth><Setting /></RequireAuth>} />
+                  <Route path="/vnpay-return" element={<Checkout />} />
+                  <Route path="/orders" element={<Order />} />
+                  <Route path="/docs" element={<Document />} />
+                  <Route path="/help&support" element={<HelpSupport />} />
+                </Route>
+                {/* Auth Routes - Không cần splash */}
+                <Route path="/signin" element={<RedirectIfAuthenticated><SignIn /></RedirectIfAuthenticated>} />
+                <Route path="/signup" element={<RedirectIfAuthenticated><SignUp /></RedirectIfAuthenticated>} />
+                <Route path="/reset-password" element={<RedirectIfAuthenticated><ResetPassword /></RedirectIfAuthenticated>} />
+                {/* Redirect /auth to /signin */}
+                <Route path="/auth" element={<Navigate to="/signin" replace />} />
+                {/* Admin Routes - Chỉ hiển thị trên Desktop */}
+                <Route path="/admin" element={
+                  <RequireAdminAuth>
+                    <MobileAdminRedirect>
+                      <AdminLayout />
+                    </MobileAdminRedirect>
+                  </RequireAdminAuth>
+                }>
+                  <Route index element={<Dashboard />} />
+                  <Route path="products" element={<ProductManager />} />
+                  <Route path="categories" element={<CategoryManager />} />
+                  <Route path="orders" element={<OrderManager />} />
+                  <Route path="users" element={<UserManager />} />
+                  <Route path="news" element={<NewsManager />} />
+                  <Route path="permissions" element={<PermissionManager />} />
+                  <Route path="roles-permission" element={<RolePermission />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </BrowserRouter>
         </>
       </CartProvider>

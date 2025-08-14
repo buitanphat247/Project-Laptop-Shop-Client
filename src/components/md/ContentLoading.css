@@ -1,0 +1,47 @@
+.content-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: 200px;
+}
+
+.content-loading.small {
+  padding: 1rem;
+  min-height: 100px;
+}
+
+.content-loading.large {
+  padding: 3rem;
+  min-height: 300px;
+}
+
+.content-loading.full-height {
+  min-height: 50vh;
+}
+
+/* Custom styling for different contexts */
+.content-loading.card {
+  background: #fafafa;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.content-loading.section {
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  background: white;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .content-loading.card {
+    background: #1f1f1f;
+    border-color: #303030;
+  }
+  
+  .content-loading.section {
+    background: #141414;
+    border-color: #303030;
+  }
+}
